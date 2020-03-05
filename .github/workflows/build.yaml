@@ -1,0 +1,25 @@
+name: Build
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+  push:
+    paths-ignore:
+      - "**.md"
+  schedule:
+    - cron: "0 0 * * *" # daily at midnight
+
+jobs:
+  plugin_test:
+    name: asdf plugin test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: asdf_plugin_test
+        uses: asdf-vm/actions/plugin-test@v1.0.0
+        with:
+          command: <YOUR TOOLS COMMAND> --version
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}

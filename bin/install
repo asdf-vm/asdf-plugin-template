@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# shellcheck source=../lib/utils.bash
+source "$(dirname "$0")/../lib/utils.bash"
+
+function install_YOUR_TOOL() {
+    helper
+    printf "install your tool here\\n"
+}
+
+install_YOUR_TOOL
