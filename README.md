@@ -7,8 +7,9 @@ For more information about creating a plugin, see the [plugins create section of
 ## Usage
 
 1. [generate a template of this repo](https://github.com/asdf-vm/asdf-plugin-template/generate)
-2. edit the following files:
+2. edit the following files/folders:
 
+   - rename folder `GITHUB` to `.github`
    - `.github/workflows/build.yaml`
      - replace `<YOUR TOOLS COMMAND>`
    - `LICENSE`
