@@ -93,7 +93,6 @@ setup() {
   github_username="${5:-$(ask_for "GitHub username")}"
   license_keyword="${6:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
-  shift 6
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
@@ -108,8 +107,7 @@ After confirmation, the \`master\` will be replaced with the generated
 template using the above information. Please ensure all seems correct.
 EOF
 
-  ok="${1:-$(ask_for "Do you want to continue?" "" "y/N")}"
-  shift 1
+  ok="${7:-$(ask_for "Do you want to continue?" "" "y/N")}"
   if [ "y" != "$ok" ]; then
     echo "Nothing done."
   else
