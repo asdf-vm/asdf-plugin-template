@@ -148,6 +148,9 @@ EOF
       echo "All done."
       echo "Your master branch has been reset to an initial commit."
       echo "You might want to push using \`--force-with-lease\` to origin/master"
+
+      echo "Showing pending TODO tags that you might want to review"
+      echo git grep -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
 }

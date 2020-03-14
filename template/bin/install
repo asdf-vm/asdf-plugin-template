@@ -5,9 +5,4 @@ set -euo pipefail
 # shellcheck source=../lib/utils.bash
 source "$(dirname "$0")/../lib/utils.bash"
 
-function install_YOUR_TOOL() {
-  helper
-  printf "install your tool here\\n"
-}
-
-install_YOUR_TOOL
+install_version "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
