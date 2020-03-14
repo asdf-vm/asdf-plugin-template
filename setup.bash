@@ -2,6 +2,37 @@
 
 set -euo pipefail
 
+HELP="
+Usage:
+
+bash $0 PLUGIN_NAME TOOL_TEST GH_USER AUTHOR_NAME TOOL_GH TOOL_PAGE LICENSE
+
+All arguments are optional and will be interactively prompted when not given.
+
+PLUGIN_NAME.
+   A name for your new plugin always starting with \`asdf-\` prefix.
+
+TOOL_TEST.
+   A shell command used to test correct installation.
+   Normallly this command is something taking \`--version\` or \`--help\`.
+
+GH_USER.
+   Your GitHub username.
+
+AUTHOR_NAME.
+   Your name, used for licensing.
+
+TOOL_GH.
+   The tool's github homepage. Default installation process will try to use
+   this to access github releases.
+
+TOOL_PAGE.
+   Documentation site for tool usage, mostly informative for users.
+
+LICENSE.
+   A license keyword.
+   https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#searching-github-by-license-type
+"
 HELP_PLUGIN_NAME="Name for your plugin, starting with \`asdf-\`, eg. \`asdf-foo\`"
 HELP_TOOL_CHECK="Shell command for testing correct tool installation. eg. \`foo --version\` or \`foo --help\`"
 HELP_TOOL_REPO="The tool's github homepage."
@@ -161,4 +192,11 @@ EOF
   fi
 }
 
-setup "$@"
+case "${1:-}" in
+  "-h" | "--help" | "help")
+    echo "$HELP"
+    exit 0
+    ;;
+  *)
+    setup "$@"
+esac

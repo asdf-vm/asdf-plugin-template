@@ -29,7 +29,7 @@ jobs:
             "ASDF Community" \
             "https://github.com/asdf-vm/asdf" \
             "https://asdf-vm.com" \
-            "Apache-2.0"
+            "Apache-2.0" \
             "yes"
 
       - name: Check setup result
