@@ -21,6 +21,7 @@ For more information about creating a plugin, see the [plugins create section of
      - expand on this contributing guide as you see fit
    - `README_TEMPLATE.md`
      - replace `<YOUR TOOL>`
+     - replace `<YOUR NAME>`
      - replace `<YOUR GITHUB USERNAME>`
      - replace `<REPO>`
      - replace the items in the `Dependencies` section
