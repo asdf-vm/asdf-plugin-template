@@ -117,6 +117,7 @@ EOF
       set -e
       # previous cleanup to ensure we can run this program many times
       git branch template 2>/dev/null || true
+      git checkout -f template
       git worktree remove -f out 2>/dev/null || true
       git branch -D out 2>/dev/null || true
 
