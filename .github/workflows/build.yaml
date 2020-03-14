@@ -26,6 +26,8 @@ jobs:
       - name: Check setup result
         run: |
           set -xe
+          ls -la .
+          git log
           test ! -d template/
           grep "unlicense.org" LICENSE
           test "master" = "$(git rev-parse --abbrev-ref HEAD)"
