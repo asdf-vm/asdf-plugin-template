@@ -3,5 +3,5 @@
 set -euo pipefail
 
 function helper() {
-    printf "helper functions here\\n"
+  printf "helper functions here\\n"
 }

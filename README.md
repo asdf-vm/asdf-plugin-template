@@ -7,26 +7,7 @@ For more information about creating a plugin, see the [plugins create section of
 ## Usage
 
 1. [generate a template of this repo](https://github.com/asdf-vm/asdf-plugin-template/generate)
-2. edit the following files/folders:
-
-   - rename folder `GITHUB` to `.github`
-   - `.github/workflows/build.yaml`
-     - replace `<YOUR TOOLS COMMAND>`
-   - `LICENSE`
-     - replace `<YEAR>`
-     - replace `<YOUR NAME>`
-   - `contributing.md`
-     - replace `<YOUR TOOL>`
-     - replace `<YOUR GITHUB USERNAME>`
-     - expand on this contributing guide as you see fit
-   - `README_TEMPLATE.md`
-     - replace `<YOUR TOOL>`
-     - replace `<YOUR NAME>`
-     - replace `<YOUR GITHUB USERNAME>`
-     - replace `<REPO>`
-     - replace the items in the `Dependencies` section
-     - rename file to README.md overwriting this file
-
+2. Clone this repo and run `bash setup.bash`
 3. write your code in the `bin/install`, `bin/list-all` and `lib/utils.bash` files.
 
 ## Contributing
