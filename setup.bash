@@ -4,7 +4,8 @@ set -euo pipefail
 
 HELP_PLUGIN_NAME="Name for your plugin, starting with \`asdf-\`, eg. \`asdf-foo\`"
 HELP_TOOL_CHECK="Shell command for testing correct tool installation. eg. \`foo --version\` or \`foo --help\`"
-HELP_TOOL_HOMEPAGE="Tool homepage. eg. https://example.org"
+HELP_TOOL_REPO="The tool's github homepage."
+HELP_TOOL_HOMEPAGE="The tool's documentation homepage if necessary."
 
 ask_for() {
   local prompt="$1"
@@ -79,7 +80,7 @@ set_placeholder() {
 }
 
 setup() {
-  local cwd out tool_name check_command author_name github_username tool_homepage ok
+  local cwd out tool_name tool_repo check_command author_name github_username tool_homepage ok
 
   cwd="$PWD"
   out="$cwd/out"
@@ -87,28 +88,34 @@ setup() {
   # ask for arguments not given via CLI
   tool_name="${1:-$(ask_for "$HELP_PLUGIN_NAME")}"
   tool_name="${tool_name/asdf-/}"
-  tool_homepage="${2:-$(ask_for "$HELP_TOOL_HOMEPAGE")}"
-  check_command="${3:-$(ask_for "$HELP_TOOL_CHECK" "$tool_name --help")}"
-  author_name="${4:-$(ask_for "Author name" "$(git config user.name 2>/dev/null)")}"
-  github_username="${5:-$(ask_for "GitHub username")}"
-  license_keyword="${6:-$(ask_license)}"
+  check_command="${2:-$(ask_for "$HELP_TOOL_CHECK" "$tool_name --help")}"
+
+  github_username="${3:-$(ask_for "Your GitHub username")}"
+  author_name="${4:-$(ask_for "Your name" "$(git config user.name 2>/dev/null)")}"
+
+  tool_repo="${5:-$(ask_for "$HELP_TOOL_REPO" "https://github.com/$github_username/$tool_name")}"
+  tool_homepage="${6:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://github.com/$github_username/$tool_name")}"
+  license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
 
 author:        $author_name
-repo:          https://github.com/$github_username/asdf-$tool_name
+plugin repo:   https://github.com/$github_username/asdf-$tool_name
 license:       https://choosealicense.com/licenses/$license_keyword/
-homepage:      $tool_homepage
-test command:  \`$check_command\`
+
+
+$tool_name github:   $tool_repo
+$tool_name docs:     $tool_homepage
+$tool_name test:     \`$check_command\`
 
 After confirmation, the \`master\` will be replaced with the generated
 template using the above information. Please ensure all seems correct.
 EOF
 
-  ok="${7:-$(ask_for "Do you want to continue?" "" "y/N")}"
-  if [ "y" != "$ok" ]; then
+  ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
+  if [ "yes" != "$ok" ]; then
     echo "Nothing done."
   else
     (
@@ -131,6 +138,7 @@ EOF
 
       set_placeholder "<YOUR TOOL>" "$tool_name" "$out"
       set_placeholder "<TOOL HOMEPAGE>" "$tool_homepage" "$out"
+      set_placeholder "<TOOL REPO>" "$tool_repo" "$out"
       set_placeholder "<TOOL CHECK>" "$check_command" "$out"
       set_placeholder "<YOUR NAME>" "$author_name" "$out"
       set_placeholder "<YOUR GITHUB USERNAME>" "$github_username" "$out"
@@ -148,7 +156,7 @@ EOF
       echo "You might want to push using \`--force-with-lease\` to origin/master"
 
       echo "Showing pending TODO tags that you might want to review"
-      echo git grep -n -C 3 "TODO"
+      git grep -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
 }

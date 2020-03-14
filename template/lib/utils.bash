@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-GH_REPO="https://github.com/<YOUR GITHUB USERNAME>/asdf-<YOUR TOOL>.git"
+# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for <YOUR TOOL>.
+GH_REPO="<TOOL REPO>"
 
 fail() {
   echo -e "\e[31mFail:\e[m $*"
@@ -12,7 +13,7 @@ fail() {
 curl_opt="--silent --location"
 
 # NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub releases.
-if [ -n "$GITHUB_API_TOKEN" ]; then
+if [ "x$GITHUB_API_TOKEN" != "x" ]; then
   curl_opt="$curl_opt --header 'Authorization: token $GITHUB_API_TOKEN'"
 fi
 
@@ -38,7 +39,7 @@ download_release() {
   filename="$2"
 
   # TODO: Adapt the release URL convention for <YOUR TOOL>
-  url="https://github.com/<YOUR GITHUB USERNAME>/<YOUR TOOL>/archive/v${version}.tar.gz"
+  url="$GH_REPO/archive/v${version}.tar.gz"
 
   echo "* Downloading <YOUR TOOL> release $version..."
   curl "$curl_opt" --output "$filename" -C - "$url" || fail "Could not download $url"
