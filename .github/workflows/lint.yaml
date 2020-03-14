@@ -24,7 +24,7 @@ jobs:
           sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
           shellcheck --version
       - name: Shellcheck
-        run: shellcheck -x bin/* -P lib/
+        run: shellcheck -x setup.bash -x template/bin/* -P template/lib/
 
   shfmt:
     runs-on: macos-latest

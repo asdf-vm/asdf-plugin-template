@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function list_all() {
-    printf "list your tool's versions here. Ensure the are space separated as asdf will insert the appropriate formatting from there.\\n"
+  printf "list your tool's versions here. Ensure the are space separated as asdf will insert the appropriate formatting from there.\\n"
 }
 
 list_all
