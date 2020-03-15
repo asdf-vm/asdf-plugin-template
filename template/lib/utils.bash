@@ -6,15 +6,15 @@ set -euo pipefail
 GH_REPO="<TOOL REPO>"
 
 fail() {
-  echo -e "\e[31mFail:\e[m $*"
+  echo -e "asdf-<YOUR TOOL>: $*"
   exit 1
 }
 
-curl_opt="--silent --location"
+curl_opt="-fsSL"
 
 # NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub releases.
-if [ "x$GITHUB_API_TOKEN" != "x" ]; then
-  curl_opt="$curl_opt --header 'Authorization: token $GITHUB_API_TOKEN'"
+if [ -n "${GITHUB_API_TOKEN:-}" ]; then
+  curl_opt="$curl_opt -H 'Authorization: token $GITHUB_API_TOKEN'"
 fi
 
 sort_versions() {
@@ -23,7 +23,8 @@ sort_versions() {
 }
 
 list_github_tags() {
-  git ls-remote --tags --refs "$GH_REPO" | grep -o 'refs/tags/.*' | cut -d/ -f3- |
+  git ls-remote --tags --refs "$GH_REPO" |\
+    grep -o 'refs/tags/.*' | cut -d/ -f3- |\
     sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
 }
 
@@ -42,7 +43,7 @@ download_release() {
   url="$GH_REPO/archive/v${version}.tar.gz"
 
   echo "* Downloading <YOUR TOOL> release $version..."
-  curl "$curl_opt" --output "$filename" -C - "$url" || fail "Could not download $url"
+  curl "$curl_opt" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {

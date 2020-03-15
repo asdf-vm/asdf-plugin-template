@@ -5,4 +5,4 @@ set -euo pipefail
 # shellcheck source=../lib/utils.bash
 source "$(dirname "$0")/../lib/utils.bash"
 
-list_all_versions | sort_versions | xargs
+list_all_versions | sort_versions | xargs echo
