@@ -103,7 +103,7 @@ set_placeholder() {
   value="$2"
   out="$3"
 
-  git grep -l -F --untracked "$name" -- "$out" |
+  git grep -P -l -F --untracked "$name" -- "$out" |
     while IFS=$'\n' read -r file; do
       tmpfile="$file.sed"
       sed "s#$name#$value#g" "$file" >"$tmpfile" && mv "$tmpfile" "$file"
@@ -187,7 +187,7 @@ EOF
       echo "You might want to push using \`--force-with-lease\` to origin/master"
 
       echo "Showing pending TODO tags that you might want to review"
-      git grep -n -C 3 "TODO"
+      git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
 }
