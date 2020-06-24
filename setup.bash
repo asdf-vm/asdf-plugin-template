@@ -77,10 +77,10 @@ test_url() {
 ask_license() {
   local license keyword
 
-  echo "Please choose a LICENSE keyword."
-  echo
-  echo "See available license keywords at"
-  echo "https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#searching-github-by-license-type"
+  echo "Please choose a LICENSE keyword." >&2
+  echo >&2
+  echo "See available license keywords at" >&2
+  echo "https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#searching-github-by-license-type" >&2
 
   while true; do
     license="$(ask_for "License keyword:" "apache-2.0" "mit/[apache-2.0]/agpl-3.0/unlicense")"
