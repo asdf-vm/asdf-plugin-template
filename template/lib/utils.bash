@@ -10,11 +10,11 @@ fail() {
   exit 1
 }
 
-curl_opt="-fsSL"
+curl_opts=(-fsSL)
 
 # NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
-  curl_opt="$curl_opt -H 'Authorization: token $GITHUB_API_TOKEN'"
+  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
 
 sort_versions() {
@@ -43,7 +43,7 @@ download_release() {
   url="$GH_REPO/archive/v${version}.tar.gz"
 
   echo "* Downloading <YOUR TOOL> release $version..."
-  curl "$curl_opt" -o "$filename" -C - "$url" || fail "Could not download $url"
+  curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {
