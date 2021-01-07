@@ -65,7 +65,7 @@ install_version() {
 
     # TODO: Asert <YOUR TOOL> executable exists.
     local tool_cmd
-    tool_cmd="$(echo "<TOOL CHECK>" | cut -d' ' -f2-)"
+    tool_cmd="$(echo "<TOOL CHECK>" | cut -d' ' -f1)"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
 
     echo "<YOUR TOOL> $version installation was successful!"
