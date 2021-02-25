@@ -1,0 +1,21 @@
+image: debian:10
+
+stages:
+  - test
+
+variables:
+  PLUGIN_NAME: foo
+  PLUGIN_EXEC: $PLUGIN_NAME
+
+asdf-plugin-test:
+  stage: test
+  before_script:
+    - apt update && apt install -y git curl bsdmainutils file
+    - git clone https://github.com/asdf-vm/asdf.git
+    - . asdf/asdf.sh
+
+  script:
+    - asdf plugin-add $PLUGIN_NAME $CI_REPOSITORY_URL
+    - asdf list-all bat
+    - asdf plugin test bat $CI_REPOSITORY_URL "$PLUGIN_EXEC --version" || exit 1
+
