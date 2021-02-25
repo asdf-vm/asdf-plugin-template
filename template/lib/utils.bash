@@ -4,9 +4,11 @@ set -euo pipefail
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for <YOUR TOOL>.
 GH_REPO="<TOOL REPO>"
+TOOL_NAME="<YOUR TOOL>"
+TOOL_TEST="<TOOL CHECK>"
 
 fail() {
-  echo -e "asdf-<YOUR TOOL>: $*"
+  echo -e "asdf-$TOOL_NAME: $*"
   exit 1
 }
 
@@ -42,7 +44,7 @@ download_release() {
   # TODO: Adapt the release URL convention for <YOUR TOOL>
   url="$GH_REPO/archive/v${version}.tar.gz"
 
-  echo "* Downloading <YOUR TOOL> release $version..."
+  echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
@@ -52,11 +54,11 @@ install_version() {
   local install_path="$3"
 
   if [ "$install_type" != "version" ]; then
-    fail "asdf-<YOUR TOOL> supports release installs only"
+    fail "asdf-$TOOL_NAME supports release installs only"
   fi
 
   # TODO: Adapt this to proper extension and adapt extracting strategy.
-  local release_file="$install_path/<YOUR TOOL>-$version.tar.gz"
+  local release_file="$install_path/$TOOL_NAME-$version.tar.gz"
   (
     mkdir -p "$install_path"
     download_release "$version" "$release_file"
@@ -65,12 +67,12 @@ install_version() {
 
     # TODO: Asert <YOUR TOOL> executable exists.
     local tool_cmd
-    tool_cmd="$(echo "<TOOL CHECK>" | cut -d' ' -f1)"
+    tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
 
-    echo "<YOUR TOOL> $version installation was successful!"
+    echo "$TOOL_NAME $version installation was successful!"
   ) || (
     rm -rf "$install_path"
-    fail "An error ocurred while installing <YOUR TOOL> $version."
+    fail "An error ocurred while installing $TOOL_NAME $version."
   )
 }
