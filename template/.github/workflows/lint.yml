@@ -6,35 +6,21 @@ on:
   push:
     paths-ignore:
       - "**.md"
-  schedule:
-    - cron: "0 0 * * *" # daily at midnight
 
 jobs:
-  shellcheck:
-    name: shellcheck
+  lint:
+    name: Shellcheck and Shell Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Update Shellcheck
-        run: |
-          sudo apt install xz-utils
-          scversion="stable"
-          wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
-          sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-          shellcheck --version
+      - name: asdf_install
+        uses: asdf-vm/actions/install@v1
+        with:
+          before_install: bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
       - name: Shellcheck
         run: shellcheck -x bin/* -P lib/
-
-  shfmt:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install shfmt
-        run: brew install shfmt
-
-      - name: Run shfmt
+      - name: Shell Format - List files to check
+        run: shfmt -f .
+      - name: Shell Format - Validate
         run: shfmt -d -i 2 -ci .
