@@ -2,7 +2,10 @@
 
 set -euo pipefail
 
+current_script_path=${BASH_SOURCE[0]}
+plugin_dir=$(dirname "$(dirname "$current_script_path")")
+
 # shellcheck source=../lib/utils.bash
-source "$(dirname "$0")/../lib/utils.bash"
+source "${plugin_dir}/lib/utils.bash"
 
 list_all_versions | sort_versions | xargs echo
