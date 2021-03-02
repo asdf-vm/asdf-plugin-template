@@ -26,7 +26,7 @@ Plugin:
 ```shell
 asdf plugin add <YOUR TOOL>
 # or
-asdf plugin add https://github.com/<YOUR GITHUB USERNAME>/asdf-<YOUR TOOL>.git
+asdf plugin add <YOUR TOOL> https://github.com/<YOUR GITHUB USERNAME>/asdf-<YOUR TOOL>.git
 ```
 
 <YOUR TOOL>:
