@@ -1,0 +1,19 @@
+
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# shellcheck source=../lib/utils.bash
+source "$(dirname "$0")/../lib/utils.bash"
+
+mkdir -p "$ASDF_DOWNLOAD_PATH"
+local release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$version.tar.gz"
+
+# Download tar.gz file to the download directory
+download_release "$ASDF_INSTALL_VERSION" "$release_file"
+
+#  Extract contents of tar.gz file into the download directory
+tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $release_file"
+
+# Remove the tar.gz file since we don't need to keep it
+rm "$release_file"
