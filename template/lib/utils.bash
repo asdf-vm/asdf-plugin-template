@@ -57,13 +57,9 @@ install_version() {
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
 
-  # TODO: Adapt this to proper extension and adapt extracting strategy.
-  local release_file="$install_path/$TOOL_NAME-$version.tar.gz"
   (
     mkdir -p "$install_path"
-    download_release "$version" "$release_file"
-    tar -xzf "$release_file" -C "$install_path" --strip-components=1 || fail "Could not extract $release_file"
-    rm "$release_file"
+    cp -r "$ASDF_DOWNLOAD_PATH/*" "$install_path"
 
     # TODO: Asert <YOUR TOOL> executable exists.
     local tool_cmd
