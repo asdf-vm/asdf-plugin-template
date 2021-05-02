@@ -1,0 +1,3 @@
+shellcheck 0.7.1
+shfmt 3.2.2
+nodejs 14.2.0
