@@ -5,7 +5,7 @@ stages:
   - test
 
 variables:
-  PLUGIN_NAME: <YOUR TOOL>
+  PLUGIN_NAME: asdf-<YOUR TOOL>
   TOOL_CHECK: <TOOL CHECK>
   SHELLCHECK_VERSION: stable
 
