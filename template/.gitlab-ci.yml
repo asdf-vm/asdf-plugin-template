@@ -27,5 +27,5 @@ asdf-plugin-test:
   script:
     - asdf plugin-add $PLUGIN_NAME $CI_REPOSITORY_URL
     - asdf list-all bat
-    - asdf plugin test bat $CI_REPOSITORY_URL "$PLUGIN_EXEC --version" || exit 1
+    - asdf plugin test bat $CI_REPOSITORY_URL --asdf-plugin-gitref $CI_COMMIT_REF_NAME "$PLUGIN_EXEC --version" || exit 1
 
