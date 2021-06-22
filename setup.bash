@@ -141,7 +141,7 @@ $tool_name github:   $tool_repo
 $tool_name docs:     $tool_homepage
 $tool_name test:     \`$check_command\`
 
-After confirmation, the \`master\` will be replaced with the generated
+After confirmation, the \`$primary_branch\` will be replaced with the generated
 template using the above information. Please ensure all seems correct.
 EOF
 
@@ -185,13 +185,13 @@ EOF
       git commit -m "Generate asdf-$tool_name plugin from template."
 
       cd "$cwd"
-      git branch -M out master
+      git branch -M out "$primary_branch"
       git worktree remove -f out
-      git checkout -f master
+      git checkout -f "$primary_branch"
 
       echo "All done."
-      echo "Your master branch has been reset to an initial commit."
-      echo "You might want to push using \`--force-with-lease\` to origin/master"
+      echo "Your $primary_branch branch has been reset to an initial commit."
+      echo "You might want to push using \`--force-with-lease\` to origin/$primary_branch"
 
       echo "Showing pending TODO tags that you might want to review"
       git grep -P -n -C 3 "TODO"
@@ -231,7 +231,7 @@ $tool_name github:   $tool_repo
 $tool_name docs:     $tool_homepage
 $tool_name test:     \`$check_command\`
 
-After confirmation, the primary branch will be replaced with the generated
+After confirmation, the \`$primary_branch\` will be replaced with the generated
 template using the above information. Please ensure all seems correct.
 EOF
 
@@ -276,13 +276,13 @@ EOF
       git commit -m "Generate asdf-$tool_name plugin from template."
 
       cd "$cwd"
-      git branch -M out master
+      git branch -M out "$primary_branch"
       git worktree remove -f out
-      git checkout -f master
+      git checkout -f "$primary_branch"
 
       echo "All done."
-      echo "Your master branch has been reset to an initial commit."
-      echo "You might want to push using \`--force-with-lease\` to origin/master"
+      echo "Your $primary_branch branch has been reset to an initial commit."
+      echo "You might want to push using \`--force-with-lease\` to origin/$primary_branch"
 
       echo "Showing pending TODO tags that you might want to review"
       git grep -P -n -C 3 "TODO"
@@ -300,6 +300,7 @@ case "${1:-}" in
     ;;
   "--github")
     shift
+    setup_github "$@"
     ;;
   *)
     setup_github "$@"

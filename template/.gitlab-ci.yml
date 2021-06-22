@@ -26,6 +26,5 @@ asdf-plugin-test:
     - . asdf/asdf.sh
   script:
     - asdf plugin-add $PLUGIN_NAME $CI_REPOSITORY_URL
-    - asdf list-all bat
-    - asdf plugin test bat $CI_REPOSITORY_URL --asdf-plugin-gitref $CI_COMMIT_REF_NAME "$TOOL_CHECK" || exit 1
-
+    - asdf list-all $PLUGIN_NAME
+    - asdf plugin test $PLUGIN_NAME $CI_REPOSITORY_URL --asdf-plugin-gitref $CI_COMMIT_REF_NAME "$TOOL_CHECK" || exit 1

@@ -1,6 +1,6 @@
 <div align="center">
 
-# asdf-<YOUR TOOL> ![Build Status](https://gitlab.com/<YOUR GITLAB USERNAME>/asdf-<YOUR TOOL>/badges/master/pipeline.svg)
+# asdf-<YOUR TOOL> ![Build Status](https://gitlab.com/<YOUR GITLAB USERNAME>/asdf-<YOUR TOOL>/badges/<PRIMARY BRANCH>/pipeline.svg)
 
 [<YOUR TOOL>](<TOOL HOMEPAGE>) plugin for the [asdf version manager](https://asdf-vm.com).
 
