@@ -111,7 +111,7 @@ set_placeholder() {
 }
 
 setup_github() {
-  local cwd out tool_name tool_repo check_command author_name github_username tool_homepage ok
+  local cwd out tool_name tool_repo check_command author_name github_username tool_homepage ok primary_branch
 
   cwd="$PWD"
   out="$cwd/out"
@@ -151,6 +151,7 @@ EOF
   else
     (
       set -e
+      primary_branch="$(git rev-parse --abbrev-ref HEAD)"
       # previous cleanup to ensure we can run this program many times
       git branch template 2>/dev/null || true
       git checkout -f template
@@ -173,8 +174,14 @@ EOF
       set_placeholder "<TOOL CHECK>" "$check_command" "$out"
       set_placeholder "<YOUR NAME>" "$author_name" "$out"
       set_placeholder "<YOUR GITHUB USERNAME>" "$github_username" "$out"
+      set_placeholder "<PRIMARY BRANCH>" "$primary_branch" "$out"
 
       git add "$out"
+      # remove GitLab specific files
+      git rm -rf "$out/.gitlab" "$out/.gitlab-ci.yml" "$out/README-gitlab.md" "$out/contributing-gitlab.md"
+      # rename GitHub specific files to final filenames
+      git mv "$out/README-github.md" "$out/README.md"
+      git mv "$out/contributing-github.md" "$out/contributing.md"
       git commit -m "Generate asdf-$tool_name plugin from template."
 
       cd "$cwd"
@@ -193,7 +200,7 @@ EOF
 }
 
 setup_gitlab() {
-  local cwd out tool_name tool_repo check_command author_name github_username tool_homepage ok
+  local cwd out tool_name tool_repo check_command author_name github_username gitlab_username tool_homepage ok primary_branch
 
   cwd="$PWD"
   out="$cwd/out"
@@ -203,11 +210,12 @@ setup_gitlab() {
   tool_name="${tool_name/asdf-/}"
   check_command="${2:-$(ask_for "$HELP_TOOL_CHECK" "$tool_name --help")}"
 
-  gitlab_username="${3:-$(ask_for "Your GitLab username")}"
+  gitlab_username="$(ask_for "Your GitLab username")"
   author_name="${4:-$(ask_for "Your name" "$(git config user.name 2>/dev/null)")}"
 
-  tool_repo="${5:-$(ask_for "$HELP_TOOL_REPO" "https://gitlab.com/$gitlab_username/$tool_name")}"
-  tool_homepage="${6:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://gitlab.com/$gitlab_username/$tool_name")}"
+  github_username="${3:-$(ask_for "Tool GitHub username")}"
+  tool_repo="${5:-$(ask_for "$HELP_TOOL_REPO" "https://github.com/$github_username/$tool_name")}"
+  tool_homepage="${6:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://github.com/$github_username/$tool_name")}"
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
@@ -233,6 +241,7 @@ EOF
   else
     (
       set -e
+      primary_branch="$(git rev-parse --abbrev-ref HEAD)"
       # previous cleanup to ensure we can run this program many times
       git branch template 2>/dev/null || true
       git checkout -f template
@@ -255,8 +264,15 @@ EOF
       set_placeholder "<TOOL CHECK>" "$check_command" "$out"
       set_placeholder "<YOUR NAME>" "$author_name" "$out"
       set_placeholder "<YOUR GITHUB USERNAME>" "$github_username" "$out"
+      set_placeholder "<YOUR GITLAB USERNAME>" "$gitlab_username" "$out"
+      set_placeholder "<PRIMARY BRANCH>" "$primary_branch" "$out"
 
       git add "$out"
+      # remove GitHub specific files
+      git rm -rf "$out/.github" "$out/README-github.md" "$out/contributing-github.md"
+      # rename GitLab specific files to final filenames
+      git mv "$out/README-gitlab.md" "$out/README.md"
+      git mv "$out/contributing-gitlab.md" "$out/contributing.md"
       git commit -m "Generate asdf-$tool_name plugin from template."
 
       cd "$cwd"
@@ -279,9 +295,13 @@ case "${1:-}" in
     exit 0
     ;;
   "--gitlab")
+    shift
     setup_gitlab "$@"
     ;;
-  "--github" | *)
+  "--github")
+    shift
+    ;;
+  *)
     setup_github "$@"
     ;;
 esac
