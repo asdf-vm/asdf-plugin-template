@@ -5,7 +5,7 @@ set -euo pipefail
 HELP="
 Usage:
 
-bash $0 PLUGIN_NAME TOOL_TEST GH_USER AUTHOR_NAME TOOL_GH TOOL_PAGE LICENSE
+bash [--github | --gitlab] $0 PLUGIN_NAME TOOL_TEST GH_USER AUTHOR_NAME TOOL_GH TOOL_PAGE LICENSE
 
 All arguments are optional and will be interactively prompted when not given.
 
@@ -17,7 +17,7 @@ TOOL_TEST.
    Normallly this command is something taking \`--version\` or \`--help\`.
 
 GH_USER.
-   Your GitHub username.
+   Your GitHub/GitLab username.
 
 AUTHOR_NAME.
    Your name, used for licensing.
@@ -110,7 +110,7 @@ set_placeholder() {
     done
 }
 
-setup() {
+setup_github() {
   local cwd out tool_name tool_repo check_command author_name github_username tool_homepage ok
 
   cwd="$PWD"
@@ -192,12 +192,96 @@ EOF
   fi
 }
 
+setup_gitlab() {
+  local cwd out tool_name tool_repo check_command author_name github_username tool_homepage ok
+
+  cwd="$PWD"
+  out="$cwd/out"
+
+  # ask for arguments not given via CLI
+  tool_name="${1:-$(ask_for "$HELP_PLUGIN_NAME")}"
+  tool_name="${tool_name/asdf-/}"
+  check_command="${2:-$(ask_for "$HELP_TOOL_CHECK" "$tool_name --help")}"
+
+  gitlab_username="${3:-$(ask_for "Your GitLab username")}"
+  author_name="${4:-$(ask_for "Your name" "$(git config user.name 2>/dev/null)")}"
+
+  tool_repo="${5:-$(ask_for "$HELP_TOOL_REPO" "https://gitlab.com/$gitlab_username/$tool_name")}"
+  tool_homepage="${6:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://gitlab.com/$gitlab_username/$tool_name")}"
+  license_keyword="${7:-$(ask_license)}"
+  license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
+
+  cat <<-EOF
+Setting up plugin: asdf-$tool_name
+
+author:        $author_name
+plugin repo:   https://gitlab.com/$gitlab_username/asdf-$tool_name
+license:       https://choosealicense.com/licenses/$license_keyword/
+
+
+$tool_name github:   $tool_repo
+$tool_name docs:     $tool_homepage
+$tool_name test:     \`$check_command\`
+
+After confirmation, the primary branch will be replaced with the generated
+template using the above information. Please ensure all seems correct.
+EOF
+
+  ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
+  if [ "yes" != "$ok" ]; then
+    echo "Nothing done."
+  else
+    (
+      set -e
+      # previous cleanup to ensure we can run this program many times
+      git branch template 2>/dev/null || true
+      git checkout -f template
+      git worktree remove -f out 2>/dev/null || true
+      git branch -D out 2>/dev/null || true
+
+      # checkout a new worktree and replace placeholders there
+      git worktree add --detach out
+
+      cd "$out"
+      git checkout --orphan out
+      git rm -rf "$out" >/dev/null
+      git read-tree --prefix=/ -u template:template/
+
+      download_license "$license_keyword" "$out/LICENSE"
+
+      set_placeholder "<YOUR TOOL>" "$tool_name" "$out"
+      set_placeholder "<TOOL HOMEPAGE>" "$tool_homepage" "$out"
+      set_placeholder "<TOOL REPO>" "$tool_repo" "$out"
+      set_placeholder "<TOOL CHECK>" "$check_command" "$out"
+      set_placeholder "<YOUR NAME>" "$author_name" "$out"
+      set_placeholder "<YOUR GITHUB USERNAME>" "$github_username" "$out"
+
+      git add "$out"
+      git commit -m "Generate asdf-$tool_name plugin from template."
+
+      cd "$cwd"
+      git branch -M out master
+      git worktree remove -f out
+      git checkout -f master
+
+      echo "All done."
+      echo "Your master branch has been reset to an initial commit."
+      echo "You might want to push using \`--force-with-lease\` to origin/master"
+
+      echo "Showing pending TODO tags that you might want to review"
+      git grep -P -n -C 3 "TODO"
+    ) || cd "$cwd"
+  fi
+}
 case "${1:-}" in
   "-h" | "--help" | "help")
     echo "$HELP"
     exit 0
     ;;
-  *)
-    setup "$@"
+  "--gitlab")
+    setup_gitlab "$@"
+    ;;
+  "--github" | *)
+    setup_github "$@"
     ;;
 esac
