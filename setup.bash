@@ -129,6 +129,8 @@ setup_github() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
+  primary_branch="$(git rev-parse --abbrev-ref HEAD)"
+
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
 
@@ -151,7 +153,6 @@ EOF
   else
     (
       set -e
-      primary_branch="$(git rev-parse --abbrev-ref HEAD)"
       # previous cleanup to ensure we can run this program many times
       git branch template 2>/dev/null || true
       git checkout -f template
@@ -219,6 +220,8 @@ setup_gitlab() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
+  primary_branch="$(git rev-parse --abbrev-ref HEAD)"
+
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
 
@@ -241,7 +244,6 @@ EOF
   else
     (
       set -e
-      primary_branch="$(git rev-parse --abbrev-ref HEAD)"
       # previous cleanup to ensure we can run this program many times
       git branch template 2>/dev/null || true
       git checkout -f template
