@@ -24,7 +24,7 @@ jobs:
           git config user.name "Foo Bearer"
           ./setup.bash \
             "asdf-foo" \
-            "foo --helo" \
+            "foo --help" \
             "asdf-community" \
             "ASDF Community" \
             "https://github.com/asdf-vm/asdf" \
