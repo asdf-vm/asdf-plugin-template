@@ -1,11 +1,11 @@
 name: Build
+
 on:
-  pull_request:
-    paths-ignore:
-      - "**.md"
   push:
-    paths-ignore:
-      - "**.md"
+    branches:
+      - master
+      - main
+  pull_request:
 
 jobs:
   test:
