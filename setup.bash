@@ -292,19 +292,19 @@ EOF
   fi
 }
 case "${1:-}" in
-  "-h" | "--help" | "help")
-    echo "$HELP"
-    exit 0
-    ;;
-  "--gitlab")
-    shift
-    setup_gitlab "$@"
-    ;;
-  "--github")
-    shift
-    setup_github "$@"
-    ;;
-  *)
-    setup_github "$@"
-    ;;
+"-h" | "--help" | "help")
+  echo "$HELP"
+  exit 0
+  ;;
+"--gitlab")
+  shift
+  setup_gitlab "$@"
+  ;;
+"--github")
+  shift
+  setup_github "$@"
+  ;;
+*)
+  setup_github "$@"
+  ;;
 esac
