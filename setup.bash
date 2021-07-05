@@ -291,6 +291,7 @@ EOF
     ) || cd "$cwd"
   fi
 }
+
 case "${1:-}" in
 "-h" | "--help" | "help")
   echo "$HELP"
