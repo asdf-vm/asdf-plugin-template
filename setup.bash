@@ -149,7 +149,7 @@ EOF
 
   ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
-    printf "Nothing done."
+    printf "Nothing done.\n"
   else
     (
       set -e
@@ -190,11 +190,11 @@ EOF
       git worktree remove -f out
       git checkout -f "$primary_branch"
 
-      printf "All done."
-      printf "Your %s branch has been reset to an initial commit." "$primary_branch"
-      printf "You might want to push using \`--force-with-lease\` to origin/%s" "$primary_branch"
+      printf "All done.\n"
+      printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
+      printf "You might want to push using \`--force-with-lease\` to origin/%s\n" "$primary_branch"
 
-      printf "Showing pending TODO tags that you might want to review"
+      printf "Showing pending TODO tags that you might want to review\n"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
@@ -240,7 +240,7 @@ EOF
 
   ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
-    printf "Nothing done."
+    printf "Nothing done.\n"
   else
     (
       set -e
@@ -282,11 +282,11 @@ EOF
       git worktree remove -f out
       git checkout -f "$primary_branch"
 
-      printf "All done."
-      printf "Your %s branch has been reset to an initial commit." "$primary_branch"
-      printf "You might want to push using \`--force-with-lease\` to origin/%s" "$primary_branch"
+      printf "All done.\n"
+      printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
+      printf "You might want to push using \`--force-with-lease\` to origin/%s\n" "$primary_branch"
 
-      printf "Showing pending TODO tags that you might want to review"
+      printf "Showing pending TODO tags that you might want to review\n"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
