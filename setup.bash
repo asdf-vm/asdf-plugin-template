@@ -129,7 +129,7 @@ setup_github() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
-  primary_branch="$(git rev-parse --abbrev-ref HEAD)"
+  primary_branch="master"
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
@@ -149,7 +149,7 @@ EOF
 
   ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
-    echo "Nothing done."
+    printf "Nothing done.\n"
   else
     (
       set -e
@@ -190,11 +190,11 @@ EOF
       git worktree remove -f out
       git checkout -f "$primary_branch"
 
-      echo "All done."
-      echo "Your $primary_branch branch has been reset to an initial commit."
-      echo "You might want to push using \`--force-with-lease\` to origin/$primary_branch"
+      printf "All done.\n"
+      printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
+      printf "You might want to push using \`--force-with-lease\` to origin/%s\n" "$primary_branch"
 
-      echo "Showing pending TODO tags that you might want to review"
+      printf "Showing pending TODO tags that you might want to review\n"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
@@ -220,7 +220,7 @@ setup_gitlab() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
-  primary_branch="$(git rev-parse --abbrev-ref HEAD)"
+  primary_branch="master"
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
@@ -240,7 +240,7 @@ EOF
 
   ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
-    echo "Nothing done."
+    printf "Nothing done.\n"
   else
     (
       set -e
@@ -282,29 +282,30 @@ EOF
       git worktree remove -f out
       git checkout -f "$primary_branch"
 
-      echo "All done."
-      echo "Your $primary_branch branch has been reset to an initial commit."
-      echo "You might want to push using \`--force-with-lease\` to origin/$primary_branch"
+      printf "All done.\n"
+      printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
+      printf "You might want to push using \`--force-with-lease\` to origin/%s\n" "$primary_branch"
 
-      echo "Showing pending TODO tags that you might want to review"
+      printf "Showing pending TODO tags that you might want to review\n"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
 }
+
 case "${1:-}" in
-  "-h" | "--help" | "help")
-    echo "$HELP"
-    exit 0
-    ;;
-  "--gitlab")
-    shift
-    setup_gitlab "$@"
-    ;;
-  "--github")
-    shift
-    setup_github "$@"
-    ;;
-  *)
-    setup_github "$@"
-    ;;
+"-h" | "--help" | "help")
+  echo "$HELP"
+  exit 0
+  ;;
+"--gitlab")
+  shift
+  setup_gitlab "$@"
+  ;;
+"--github")
+  shift
+  setup_github "$@"
+  ;;
+*)
+  setup_github "$@"
+  ;;
 esac

@@ -1,18 +1,20 @@
 name: Build
+
 on:
-  pull_request:
-    paths-ignore:
-      - "**.md"
   push:
-    paths-ignore:
-      - "**.md"
+    branches:
+      - master
+      - main
+  pull_request:
 
 jobs:
   test:
     name: template setup test
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os:
+          - ubuntu-latest
+          - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -22,7 +24,7 @@ jobs:
           git config user.name "Foo Bearer"
           ./setup.bash \
             "asdf-foo" \
-            "foo --helo" \
+            "foo --help" \
             "asdf-community" \
             "ASDF Community" \
             "https://github.com/asdf-vm/asdf" \
