@@ -1,38 +1,36 @@
 name: Lint
+
 on:
-  pull_request:
-    paths-ignore:
-      - "**.md"
   push:
-    paths-ignore:
-      - "**.md"
+    branches:
+      - master
+      - main
+  pull_request:
 
 jobs:
   shellcheck:
-    name: shellcheck
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Update Shellcheck
-        run: |
-          sudo apt install xz-utils
-          scversion="stable"
-          wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
-          sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-          shellcheck --version
-      - name: Shellcheck
-        run: shellcheck -x setup.bash -x template/bin/* -P template/lib/
 
-  shfmt:
-    runs-on: macos-latest
+      - name: Install asdf dependencies
+        uses: asdf-vm/actions/install@v1
 
+      - name: Run ShellCheck
+        run: scripts/shellcheck.bash
+
+  shellfmt:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install shfmt
-        run: brew install shfmt
+      - name: Install asdf dependencies
+        uses: asdf-vm/actions/install@v1
+
+      - name: List file to shfmt
+        run: shfmt -f .
 
       - name: Run shfmt
-        run: shfmt .
+        run: scripts/shfmt.bash
