@@ -149,7 +149,7 @@ EOF
 
   ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
-    echo "Nothing done."
+    printf "Nothing done."
   else
     (
       set -e
@@ -240,7 +240,7 @@ EOF
 
   ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
-    echo "Nothing done."
+    printf "Nothing done."
   else
     (
       set -e
@@ -282,11 +282,11 @@ EOF
       git worktree remove -f out
       git checkout -f "$primary_branch"
 
-      echo "All done."
-      echo "Your $primary_branch branch has been reset to an initial commit."
-      echo "You might want to push using \`--force-with-lease\` to origin/$primary_branch"
+      printf "All done."
+      printf "Your %s branch has been reset to an initial commit." "$primary_branch"
+      printf "You might want to push using \`--force-with-lease\` to origin/%s" "$primary_branch"
 
-      echo "Showing pending TODO tags that you might want to review"
+      printf "Showing pending TODO tags that you might want to review"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
