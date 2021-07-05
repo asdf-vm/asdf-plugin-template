@@ -1,0 +1,30 @@
+image: debian:10
+
+stages:
+  - lint
+  - test
+
+variables:
+  PLUGIN_NAME: asdf-<YOUR TOOL>
+  TOOL_CHECK: <TOOL CHECK>
+  SHELLCHECK_VERSION: stable
+
+asdf-plugin-lint:
+  stage: lint
+  before_script:
+    - apt update && apt install -y xz-utils wget
+    - wget -qO- https://github.com/koalaman/shellcheck/releases/download/$SHELLCHECK_VERSION/shellcheck-$SHELLCHECK_VERSION.linux.x86_64.tar.xz | tar xJv
+    - cp shellcheck-$SHELLCHECK_VERSION/shellcheck /usr/bin
+  script:
+    - shellcheck -x bin/* -P lib/
+
+asdf-plugin-test:
+  stage: test
+  before_script:
+    - apt update && apt install -y git curl bsdmainutils file
+    - git clone https://github.com/asdf-vm/asdf.git
+    - . asdf/asdf.sh
+  script:
+    - asdf plugin-add $PLUGIN_NAME $CI_REPOSITORY_URL
+    - asdf list-all $PLUGIN_NAME
+    - asdf plugin test $PLUGIN_NAME $CI_REPOSITORY_URL --asdf-plugin-gitref $CI_COMMIT_REF_NAME "$TOOL_CHECK" || exit 1
