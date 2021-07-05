@@ -220,7 +220,7 @@ setup_gitlab() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
-  primary_branch="$(git rev-parse --abbrev-ref HEAD)"
+  primary_branch="master"
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
