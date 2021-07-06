@@ -170,7 +170,7 @@ EOF
       git read-tree --prefix=/ -u template:template/
 
       download_license "$license_keyword" "$out/LICENSE"
-      sed -i.bak '1s;^;TODO: INSERT YOUR NAME & COPYRIGHT YEAR\n;g' "$out/LICENSE"
+      sed -i '1s;^;TODO: INSERT YOUR NAME & COPYRIGHT YEAR\n;g' "$out/LICENSE"
 
       set_placeholder "<YOUR TOOL>" "$tool_name" "$out"
       set_placeholder "<TOOL HOMEPAGE>" "$tool_homepage" "$out"
