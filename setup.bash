@@ -196,7 +196,7 @@ EOF
       printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
       printf "Push to origin/%s with \`git push --force-with-lease\`\n" "$primary_branch"
 
-      printf "Review these TODO items\n"
+      printf "Review these TODO items:\n"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
