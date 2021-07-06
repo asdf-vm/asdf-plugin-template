@@ -23,8 +23,8 @@ AUTHOR_NAME.
    Your name, used for licensing.
 
 TOOL_GH.
-   The tool's github homepage. Default installation process will try to use
-   this to access github releases.
+   The tool's GitHub homepage. Default installation process will try to use
+   this to access GitHub releases.
 
 TOOL_PAGE.
    Documentation site for tool usage, mostly informative for users.
@@ -35,7 +35,7 @@ LICENSE.
 "
 HELP_PLUGIN_NAME="Name for your plugin, starting with \`asdf-\`, eg. \`asdf-foo\`"
 HELP_TOOL_CHECK="Shell command for testing correct tool installation. eg. \`foo --version\` or \`foo --help\`"
-HELP_TOOL_REPO="The tool's github homepage."
+HELP_TOOL_REPO="The tool's GitHub homepage."
 HELP_TOOL_HOMEPAGE="The tool's documentation homepage if necessary."
 
 ask_for() {
@@ -43,6 +43,7 @@ ask_for() {
   local default_value="${2:-}"
   local alternatives="${3:-"[$default_value]"}"
   local value=""
+
   while [ -z "$value" ]; do
     echo "$prompt" >&2
     if [ "[]" != "$alternatives" ]; then
@@ -55,13 +56,15 @@ ask_for() {
       value="$default_value"
     fi
   done
-  echo "$value"
+
+  printf "%s\n" "$value"
 }
 
 download_license() {
   local keyword file
   keyword="$1"
   file="$2"
+
   curl -qsL "https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/${keyword}.txt" |
     extract_license >"$file"
 }
@@ -77,10 +80,9 @@ test_url() {
 ask_license() {
   local license keyword
 
-  echo "Please choose a LICENSE keyword." >&2
-  echo >&2
-  echo "See available license keywords at" >&2
-  echo "https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#searching-github-by-license-type" >&2
+  printf "%s\n" "Please choose a LICENSE keyword." >&2
+  printf "%s\n" "See available license keywords at" >&2
+  printf "%s\n" "https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#searching-github-by-license-type" >&2
 
   while true; do
     license="$(ask_for "License keyword:" "apache-2.0" "mit/[apache-2.0]/agpl-3.0/unlicense")"
@@ -90,11 +92,11 @@ ask_license() {
     if test_url "$url"; then
       break
     else
-      echo "Invalid license keyword: $license"
+      printf "Invalid license keyword: %s\n" "$license"
     fi
   done
 
-  echo "$keyword"
+  printf "%s\n" "$keyword"
 }
 
 set_placeholder() {
@@ -168,6 +170,7 @@ EOF
       git read-tree --prefix=/ -u template:template/
 
       download_license "$license_keyword" "$out/LICENSE"
+      sed -i.bak '1s;^;TODO: INSERT YOUR NAME & COPYRIGHT YEAR\n;g' "$out/LICENSE"
 
       set_placeholder "<YOUR TOOL>" "$tool_name" "$out"
       set_placeholder "<TOOL HOMEPAGE>" "$tool_homepage" "$out"
@@ -192,9 +195,9 @@ EOF
 
       printf "All done.\n"
       printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
-      printf "You might want to push using \`--force-with-lease\` to origin/%s\n" "$primary_branch"
+      printf "Push to origin/%s with \`git push --force-with-lease\`\n" "$primary_branch"
 
-      printf "Showing pending TODO tags that you might want to review\n"
+      printf "Review these TODO items:\n"
       git grep -P -n -C 3 "TODO"
     ) || cd "$cwd"
   fi
@@ -294,7 +297,7 @@ EOF
 
 case "${1:-}" in
 "-h" | "--help" | "help")
-  echo "$HELP"
+  printf "%s\n" "$HELP"
   exit 0
   ;;
 "--gitlab")
