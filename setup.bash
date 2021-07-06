@@ -131,7 +131,7 @@ setup_github() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
-  primary_branch="master"
+  primary_branch="main"
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
@@ -223,7 +223,7 @@ setup_gitlab() {
   license_keyword="${7:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
-  primary_branch="master"
+  primary_branch="main"
 
   cat <<-EOF
 Setting up plugin: asdf-$tool_name
