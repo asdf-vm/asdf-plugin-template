@@ -15,3 +15,17 @@ This is an [asdf-vm plugin](https://asdf-vm.com/#/plugins-create) template with 
 ## Contributing
 
 Contributions welcome!
+
+1. Install `asdf` tools
+    ```shell
+    asdf plugin add shellcheck https://github.com/luizm/asdf-shellcheck.git
+    asdf plugin add shfmt https://github.com/luizm/asdf-shfmt.git
+    asdf install
+    ```
+2. Develop!
+3. Lint & Format
+    ```shell
+    ./scripts/shellcheck.bash
+    ./scripts/shfmt.bash
+    ```
+4. PR changes
