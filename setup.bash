@@ -195,10 +195,19 @@ EOF
 
       printf "All done.\n"
       printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
-      printf "Push to origin/%s with \`git push --force-with-lease\`\n" "$primary_branch"
 
-      printf "Review these TODO items:\n"
-      git grep -P -n -C 3 "TODO"
+      ok="${9:-$(ask_for "Push to origin? (yes/no)")}"
+      if [ "yes" != "$ok" ]; then
+        printf "Local repo not pushed.\n"
+        printf "Manually push to origin/%s with \`git push --force-with-lease\`\n" "$primary_branch"
+        printf "Then, find TODO items with \`git grep -n TODO\` and resolve them.\n"
+        printf "Remember to commit and push your changes afterwards.\n"
+      else
+        git push --force-with-lease
+        printf "Done pushing to origin/%s\n" "$primary_branch"
+        printf "Now, find TODO items with \`git grep -n TODO\` and resolve them.\n"
+        printf "Remember to commit and push your changes afterwards.\n"
+      fi
     ) || cd "$cwd"
   fi
 }
@@ -287,10 +296,19 @@ EOF
 
       printf "All done.\n"
       printf "Your %s branch has been reset to an initial commit.\n" "$primary_branch"
-      printf "You might want to push using \`--force-with-lease\` to origin/%s\n" "$primary_branch"
 
-      printf "Showing pending TODO tags that you might want to review\n"
-      git grep -P -n -C 3 "TODO"
+      ok="${9:-$(ask_for "Push to origin? (yes/no)")}"
+      if [ "yes" != "$ok" ]; then
+        printf "Local repo not pushed.\n"
+        printf "Manually push to origin/%s with \`git push --force-with-lease\`\n" "$primary_branch"
+        printf "Then, find TODO items with \`git grep -n TODO\` and resolve them.\n"
+        printf "Remember to commit and push your changes afterwards.\n"
+      else
+        git push --force-with-lease
+        printf "Done pushing to origin/%s\n" "$primary_branch"
+        printf "Now, find TODO items with \`git grep -n TODO\` and resolve them.\n"
+        printf "Remember to commit and push your changes afterwards.\n"
+      fi
     ) || cd "$cwd"
   fi
 }
