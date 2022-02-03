@@ -5,7 +5,7 @@ set -euo pipefail
 HELP="
 Usage:
 
-bash [--github | --gitlab] $0 PLUGIN_NAME TOOL_TEST GH_USER AUTHOR_NAME TOOL_GH TOOL_PAGE LICENSE
+bash [--github | --gitlab] $0 PLUGIN_NAME TOOL_TEST GH_USER AUTHOR_NAME AUTHOR_EMAIL TOOL_GH TOOL_PAGE LICENSE
 
 All arguments are optional and will be interactively prompted when not given.
 
@@ -21,6 +21,9 @@ GH_USER.
 
 AUTHOR_NAME.
    Your name, used for licensing.
+
+AUTHOR_EMAIL.
+   Your email address.
 
 TOOL_GH.
    The tool's GitHub homepage. Default installation process will try to use
@@ -125,10 +128,11 @@ setup_github() {
 
   github_username="${3:-$(ask_for "Your GitHub username")}"
   author_name="${4:-$(ask_for "Your name" "$(git config user.name 2>/dev/null)")}"
+  author_email="${5:-$(ask_for "Your email address" "$(git config user.email 2>/dev/null)")}"
 
-  tool_repo="${5:-$(ask_for "$HELP_TOOL_REPO" "https://github.com/$github_username/$tool_name")}"
-  tool_homepage="${6:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://github.com/$github_username/$tool_name")}"
-  license_keyword="${7:-$(ask_license)}"
+  tool_repo="${6:-$(ask_for "$HELP_TOOL_REPO" "https://github.com/$github_username/$tool_name")}"
+  tool_homepage="${7:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://github.com/$github_username/$tool_name")}"
+  license_keyword="${8:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
   primary_branch="main"
@@ -137,6 +141,7 @@ setup_github() {
 Setting up plugin: asdf-$tool_name
 
 author:        $author_name
+email:         $author_email
 plugin repo:   https://github.com/$github_username/asdf-$tool_name
 license:       https://choosealicense.com/licenses/$license_keyword/
 
@@ -149,7 +154,7 @@ After confirmation, the \`$primary_branch\` will be replaced with the generated
 template using the above information. Please ensure all seems correct.
 EOF
 
-  ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
+  ok="${9:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
     printf "Nothing done.\n"
   else
@@ -177,6 +182,7 @@ EOF
       set_placeholder "<TOOL REPO>" "$tool_repo" "$out"
       set_placeholder "<TOOL CHECK>" "$check_command" "$out"
       set_placeholder "<YOUR NAME>" "$author_name" "$out"
+      set_placeholder "<YOUR EMAIL>" "$author_email" "$out"
       set_placeholder "<YOUR GITHUB USERNAME>" "$github_username" "$out"
       set_placeholder "<PRIMARY BRANCH>" "$primary_branch" "$out"
 
@@ -186,6 +192,15 @@ EOF
       # rename GitHub specific files to final filenames
       git mv "$out/README-github.md" "$out/README.md"
       git mv "$out/contributing-github.md" "$out/contributing.md"
+
+      if [ -z "$(git config user.email)" ]; then
+        git config user.email "$author_email"
+      fi
+
+      if [ -z "$(git config user.name)" ]; then
+        git config user.name "$author_name"
+      fi
+
       git commit -m "Generate asdf-$tool_name plugin from template."
 
       cd "$cwd"
@@ -216,11 +231,12 @@ setup_gitlab() {
 
   gitlab_username="$(ask_for "Your GitLab username")"
   author_name="${4:-$(ask_for "Your name" "$(git config user.name 2>/dev/null)")}"
+  author_email="${5:-$(ask_for "Your email address" "$(git config user.email 2>/dev/null)")}"
 
   github_username="${3:-$(ask_for "Tool GitHub username")}"
-  tool_repo="${5:-$(ask_for "$HELP_TOOL_REPO" "https://github.com/$github_username/$tool_name")}"
-  tool_homepage="${6:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://github.com/$github_username/$tool_name")}"
-  license_keyword="${7:-$(ask_license)}"
+  tool_repo="${6:-$(ask_for "$HELP_TOOL_REPO" "https://github.com/$github_username/$tool_name")}"
+  tool_homepage="${7:-$(ask_for "$HELP_TOOL_HOMEPAGE" "https://github.com/$github_username/$tool_name")}"
+  license_keyword="${8:-$(ask_license)}"
   license_keyword="$(echo "$license_keyword" | tr '[:upper:]' '[:lower:]')"
 
   primary_branch="main"
@@ -229,6 +245,7 @@ setup_gitlab() {
 Setting up plugin: asdf-$tool_name
 
 author:        $author_name
+email:         $author_email
 plugin repo:   https://gitlab.com/$gitlab_username/asdf-$tool_name
 license:       https://choosealicense.com/licenses/$license_keyword/
 
@@ -241,7 +258,7 @@ After confirmation, the \`$primary_branch\` will be replaced with the generated
 template using the above information. Please ensure all seems correct.
 EOF
 
-  ok="${8:-$(ask_for "Type \`yes\` if you want to continue.")}"
+  ok="${9:-$(ask_for "Type \`yes\` if you want to continue.")}"
   if [ "yes" != "$ok" ]; then
     printf "Nothing done.\n"
   else
@@ -268,6 +285,7 @@ EOF
       set_placeholder "<TOOL REPO>" "$tool_repo" "$out"
       set_placeholder "<TOOL CHECK>" "$check_command" "$out"
       set_placeholder "<YOUR NAME>" "$author_name" "$out"
+      set_placeholder "<YOUR EMAIL>" "$author_email" "$out"
       set_placeholder "<YOUR GITHUB USERNAME>" "$github_username" "$out"
       set_placeholder "<YOUR GITLAB USERNAME>" "$gitlab_username" "$out"
       set_placeholder "<PRIMARY BRANCH>" "$primary_branch" "$out"
