@@ -14,7 +14,7 @@ PLUGIN_NAME.
 
 TOOL_TEST.
    A shell command used to test correct installation.
-   Normallly this command is something taking \`--version\` or \`--help\`.
+   Normally this command is something taking \`--version\` or \`--help\`.
 
 GH_USER.
    Your GitHub/GitLab username.
