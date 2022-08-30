@@ -1,0 +1,10 @@
+# Output should be freeform text. asdf decides how to reformat it.
+
+echo 'Basic usage:
+
+  asdf install $TOOL_NAME latest
+  asdf global $TOOL_NAME latest
+  $TOOL_TEST
+
+Check the asdf documentation for more instructions on how to install and manage versions of $TOOL_NAME.
+'

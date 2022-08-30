@@ -1,0 +1,5 @@
+# Output should be <title>: <link>
+
+echo 'home-page: https://github.com/$GH_USER/$PLUGIN_NAME
+$TOOL_NAME: $TOOL_PAGE
+'
