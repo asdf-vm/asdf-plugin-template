@@ -2,10 +2,20 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for <YOUR TOOL>.
-GH_REPO="<TOOL REPO>"
+GIT_VERSION=$(git --version)
+GIT_VERSION=${GIT_VERSION##* }
+# TODO: Ensure this is the correct GitHub/GitLab homepage where releases can be downloaded for <YOUR TOOL>.
+REPO="<TOOL REPO>"
 TOOL_NAME="<YOUR TOOL>"
 TOOL_TEST="<TOOL CHECK>"
+IS_GITHUB=$(
+  [[ "$REPO" =~ "github" ]]
+  echo $?
+)
+
+git_supports_sort() {
+  awk '{ split($0,a,"."); if ((a[1] < 2) || (a[2] < 18)) { print "1" } else { print "0" } }' <<<"$1"
+}
 
 fail() {
   echo -e "asdf-$TOOL_NAME: $*"
@@ -14,26 +24,30 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub releases.
-if [ -n "${GITHUB_API_TOKEN:-}" ]; then
-  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
+if [ $(git_supports_sort "${GIT_VERSION}") -eq 1 ]; then
+  printf "must have git >= 2.18.0, have ${GIT_VERSION}\n"
+  exit 1
 fi
 
-sort_versions() {
-  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
-    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
-}
+# NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub or GitLab releases.
+if [ -n "${GITHUB_API_TOKEN:-}" ]; then
+  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
+elif [ -n "${GITLAB_API_TOKEN:-}" ]; then
+  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITLAB_API_TOKEN")
+fi
 
-list_github_tags() {
-  git ls-remote --tags --refs "$GH_REPO" |
-    grep -o 'refs/tags/.*' | cut -d/ -f3- |
-    sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+list_remote_tags() {
+  git -c 'versionsort.suffix=a' -c 'versionsort.suffix=b' \
+    -c 'versionsort.suffix=r' -c 'versionsort.suffix=p' \
+    -c 'versionsort.suffix=-' -c 'versionsort.suffix=_' \
+    ls-remote --exit-code --tags --refs --sort="version:refname" "$REPO" |
+    awk -F'[/v]' '{ print $NF }' || fail "no releases found"
 }
 
 list_all_versions() {
   # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
   # Change this function if <YOUR TOOL> has other means of determining installable versions.
-  list_github_tags
+  list_remote_tags
 }
 
 download_release() {
@@ -42,10 +56,14 @@ download_release() {
   filename="$2"
 
   # TODO: Adapt the release URL convention for <YOUR TOOL>
-  url="$GH_REPO/archive/v${version}.tar.gz"
-
+  if [ $IS_GITHUB -eq 0 ]; then
+    url="$REPO/archive/v${version}.tar.gz"
+  else
+    url="$REPO/-/archive/${version}/${TOOL_NAME}-${version}.tar.gz"
+  fi
+  printf "%s: %s\n" "url" "$url"
   echo "* Downloading $TOOL_NAME release $version..."
-  curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+  curl "${curl_opts[@]}" -o "$filename" "$url" || fail "Could not download $url"
 }
 
 install_version() {
