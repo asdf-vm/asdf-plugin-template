@@ -41,7 +41,7 @@ list_remote_tags() {
     -c 'versionsort.suffix=r' -c 'versionsort.suffix=p' \
     -c 'versionsort.suffix=-' -c 'versionsort.suffix=_' \
     ls-remote --exit-code --tags --refs --sort="version:refname" "$REPO" |
-    awk -F'[/v]' '{ print $NF }' || fail "no releases found"
+    awk -F'[/v]' '$NF ~ /^[0-9]+.*/ { print $NF }' || fail "no releases found"
 }
 
 list_all_versions() {
