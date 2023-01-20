@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+GIT_REMINDER_FILE="${ASDF_INSTALL_PATH}/.upgradegit"
 GIT_VERSION=$(git --version)
 GIT_VERSION=${GIT_VERSION##* }
 # TODO: Ensure this is the correct GitHub/GitLab homepage where releases can be downloaded for <YOUR TOOL>.
@@ -24,9 +25,15 @@ fail() {
 
 curl_opts=(-fsSL)
 
-if [ $(git_supports_sort "${GIT_VERSION}") -eq 1 ]; then
-  printf "must have git >= 2.18.0, have ${GIT_VERSION}\n"
-  exit 1
+if [ $(git_supports_sort "${GIT_VERSION}") -eq 0 ]; then
+  rm -f "${GIT_REMINDER_FILE}"
+  GIT_SUPPORTS_SORT=0
+else
+  GIT_SUPPORTS_SORT=1
+  if [ ! -f "${GIT_REMINDER_FILE}" ]; then
+    printf "consider upgrading git to a version >= 2.18.0 for faster asdf - you have v${GIT_VERSION}\n"
+    touch "${GIT_REMINDER_FILE}"
+  fi
 fi
 
 # NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub or GitLab releases.
@@ -36,18 +43,35 @@ elif [ -n "${GITLAB_API_TOKEN:-}" ]; then
   curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITLAB_API_TOKEN")
 fi
 
+# NOTE: If <YOUR TOOL> doesn't issue releases according to something resembling semver,
+# you will need to edit the awk regex.
 list_remote_tags() {
-  git -c 'versionsort.suffix=a' -c 'versionsort.suffix=b' \
-    -c 'versionsort.suffix=r' -c 'versionsort.suffix=p' \
-    -c 'versionsort.suffix=-' -c 'versionsort.suffix=_' \
-    ls-remote --exit-code --tags --refs --sort="version:refname" "$REPO" |
-    awk -F'[/v]' '$NF ~ /^[0-9]+.*/ { print $NF }' || fail "no releases found"
+  if [ ${GIT_SUPPORTS_SORT} -eq 0 ]; then
+    git -c 'versionsort.suffix=a' -c 'versionsort.suffix=b' \
+      -c 'versionsort.suffix=r' -c 'versionsort.suffix=p' \
+      -c 'versionsort.suffix=-' -c 'versionsort.suffix=_' \
+      ls-remote --exit-code --tags --refs --sort="version:refname" "$REPO" |
+      awk -F'[/v]' '$NF ~ /^[0-9]+.*/ { print $NF }' || fail "no releases found"
+  else
+    git ls-remote --exit-code --tags --refs "$REPO" |
+      awk -F'[/v]' '$NF ~ /^[0-9]+.*/ { print $NF }' || fail "no releases found"
+  fi
 }
 
 list_all_versions() {
   # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
   # Change this function if <YOUR TOOL> has other means of determining installable versions.
-  list_remote_tags
+  if [ ${GIT_SUPPORTS_SORT} -eq 0 ]; then
+    list_remote_tags
+  else
+    list_remote_tags | sort_versions
+  fi
+}
+
+# NOTE: This is a fallback for if the user's installed version of git doesn't support sorting.
+sort_versions() {
+  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
+    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
 }
 
 download_release() {
