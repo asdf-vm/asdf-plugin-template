@@ -40,15 +40,13 @@ download_release() {
   local version filename url
   version="$1"
   filename="$2"
-
-  # we need the OS part
-
-
+  arch="$3"
+  os="$4"
 
   # TODO: Adapt the release URL convention for okta-aws-cli
-  url="$GH_REPO/releases/download//v${version}/okta-aws-cli_${version}_<HERE ARCHITECTURE>.tar.gz"
+  url="$GH_REPO/releases/download//v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
 
-
+# check the signature
 # https://github.com/okta/okta-aws-cli/releases/download/v0.2.1/okta-aws-cli_0.2.1_Darwin_arm64.tar.gz
 
 
