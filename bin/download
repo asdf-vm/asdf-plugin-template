@@ -2,6 +2,21 @@
 
 set -euo pipefail
 
+# we must get the os/architecture.
+ARCH=$(uname -m)
+OS=$(uname -s)
+
+# let's check what's acceptable
+if [[ "${ARCH}" != "x86_64" ]]; then
+    echo "Cannot run on ${ARCH}"
+    exit 1
+fi
+
+if [[ "${OS}" != "Darwin" ]]; then
+    echo "Cannot run on ${OS}"
+    exit 1
+fi
+
 current_script_path=${BASH_SOURCE[0]}
 plugin_dir=$(dirname "$(dirname "$current_script_path")")
 
