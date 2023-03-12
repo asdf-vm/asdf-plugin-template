@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+set -x
+
 # we must get the os/architecture.
 ARCH=$(uname -m)
 OS=$(uname -s)
