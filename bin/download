@@ -7,11 +7,14 @@ set -x
 # we must get the os/architecture.
 ARCH=$(uname -m)
 OS=$(uname -s)
+ALTARCH=""
 
 # let's check what's acceptable
 if [[ "${ARCH}" != "x86_64" ]]; then
     echo "Cannot run on ${ARCH}"
     exit 1
+else
+    ALTARCH=amd64
 fi
 
 if [[ "${OS}" != "Darwin" ]]; then
@@ -31,7 +34,7 @@ mkdir -p "$ASDF_DOWNLOAD_PATH"
 release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
 
 # Download tar.gz file to the download directory
-download_release "$ASDF_INSTALL_VERSION" "$release_file" "${ARCH}" "${OS}"
+download_release "$ASDF_INSTALL_VERSION" "$release_file" "${ALTARCH}" "${OS}"
 
 ls -l "$release_file"
 
@@ -42,8 +45,6 @@ tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "
 echo "ASDF_DOWNLOAD_PATH: ${ASDF_DOWNLOAD_PATH}"
 
 ls -l "${ASDF_DOWNLOAD_PATH}"
-
-exit 1
 
 # Remove the tar.gz file since we don't need to keep it
 rm "$release_file"
