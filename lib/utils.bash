@@ -43,6 +43,8 @@ download_release() {
   arch="$3"
   os="$4"
 
+  echo "INSIDE download_release with arch: ${arch}"
+
   # TODO: Adapt the release URL convention for okta-aws-cli
   url="$GH_REPO/releases/download//v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
 
