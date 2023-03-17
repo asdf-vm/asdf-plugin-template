@@ -42,7 +42,8 @@ echo "ASDF_DOWNLOAD_PATH: ${ASDF_DOWNLOAD_PATH}"
 
 #  Extract contents of tar.gz file into the download directory
 echo "Running tar"
-tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $release_file"
+pwd
+tar -vxzf "$release_file" -C "$ASDF_DOWNLOAD_PATH"  || fail "Could not extract $release_file"
 
 echo "After tar"
 echo "ASDF_DOWNLOAD_PATH: ${ASDF_DOWNLOAD_PATH}"
