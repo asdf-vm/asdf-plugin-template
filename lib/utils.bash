@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-set -x
-
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for okta-aws-cli.
 GH_REPO="https://github.com/okta/okta-aws-cli"
 TOOL_NAME="okta-aws-cli"
