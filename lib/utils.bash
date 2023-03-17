@@ -68,7 +68,6 @@ download_release() {
 }
 
 install_version() {
-  set -x
   local install_type="$1"
   local version="$2"
   local install_path="${3%/bin}/bin"
