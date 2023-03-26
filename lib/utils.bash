@@ -82,9 +82,10 @@ install_version() {
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
     echo "copied ${ASDF_DOWNLOAD_PATH}/* to ${install_path}"
-
+    echo "Listing file in ${ASDF_DOWNLOAD_PATH}/*"
     ls -l "$ASDF_DOWNLOAD_PATH"/*
 
+    echo "listing ${install_path}"
     ls -l ${install_path}
 
     # TODO: Assert okta-aws-cli executable exists.
