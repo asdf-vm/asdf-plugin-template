@@ -1,0 +1,7 @@
+steps:
+  - name: asdf_plugin_test
+    uses: asdf-vm/actions/plugin-test@v1
+    with:
+      command: "my_tool --version"
+    env:
+      GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }} # automatically provided
