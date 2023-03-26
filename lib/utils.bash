@@ -80,8 +80,8 @@ install_version() {
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
 
-  if [[ ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version}" && ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}" ]]; then
-    fail "ERROR: neither ${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version} nor ${ASDF_DOWNLOAD_PATH}/${tool_cmd} exist. After untarring the downloaded release file I cannot find the executable"
+  if [[ ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}_v${version}" && ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}" ]]; then
+    fail "ERROR: neither ${ASDF_DOWNLOAD_PATH}/${tool_cmd}_v${version} nor ${ASDF_DOWNLOAD_PATH}/${tool_cmd} exist. After untarring the downloaded release file I cannot find the executable"
   fi
 
   (
