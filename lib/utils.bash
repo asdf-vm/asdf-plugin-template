@@ -87,9 +87,8 @@ install_version() {
   (
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
-    echo "making a copy of ${install_path}/${tool_cmd}_${version} to ${install_path}/${tool_cmd}"
-    
-    cp -p "${install_path}/${tool_cmd}_${version}" "${install_path}/${tool_cmd}"
+    echo "making a copy of ${install_path}/${tool_cmd}_v${version} to ${install_path}/${tool_cmd}"
+    cp -p "${install_path}/${tool_cmd}_v${version}" "${install_path}/${tool_cmd}"
     echo "copied ${ASDF_DOWNLOAD_PATH}/* to ${install_path}"
     echo "Listing file in ${ASDF_DOWNLOAD_PATH}/*"
     ls -l "$ASDF_DOWNLOAD_PATH"/*
