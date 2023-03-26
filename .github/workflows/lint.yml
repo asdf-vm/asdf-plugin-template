@@ -33,4 +33,3 @@ jobs:
 
       - name: Run shfmt
         run: scripts/shfmt.bash
-

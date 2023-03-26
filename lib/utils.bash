@@ -43,10 +43,11 @@ download_release() {
   arch="$3"
   os="$4"
 
-  echo "INSIDE download_release with arch: ${arch}"
+  echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
 
   # TODO: Adapt the release URL convention for okta-aws-cli
   url="$GH_REPO/releases/download//v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
+  echo "url: ${url}"
 
 # check the signature
 # https://github.com/okta/okta-aws-cli/releases/download/v0.2.1/okta-aws-cli_0.2.1_Darwin_arm64.tar.gz
@@ -61,6 +62,7 @@ download_release() {
 # okta-aws-cli_0.2.1_freebsd_x86_64.tar.gz
 # okta-aws-cli_0.2.1_Linux_arm64.tar.gz
 
+  echo "About to execute curl with TOOL_NAME: ${TOOL_NAME} curl_opts: ${curl_opts} filename: ${filename} url: ${url}"
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
