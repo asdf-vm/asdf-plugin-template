@@ -95,6 +95,8 @@ install_version() {
 
     echo "checking for executable install_path: ${install_path} tool_cmd: ${tool_cmd}"
 
+    echo "listing file: install_path/tool_cmd ${install_path}/${tool_cmd}"
+
     test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
     echo "$TOOL_NAME $version installation was successful!"
