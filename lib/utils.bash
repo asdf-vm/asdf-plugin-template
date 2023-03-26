@@ -46,7 +46,7 @@ download_release() {
   echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
 
   # TODO: Adapt the release URL convention for okta-aws-cli
-  url="$GH_REPO/releases/download//v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
+  url="$GH_REPO/releases/download/v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
   echo "url: ${url}"
 
 # check the signature

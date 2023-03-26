@@ -16,7 +16,7 @@ if [[ "${OS}" != "Darwin" ]]; then
 fi
 
 # Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
-if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "v0.3.0" ]]; then
+if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
     ALTARCH=amd64
 elif [[ "${ARCH}" != "x86_64" ]]; then
     echo "cannot run on hardware ${ARCH}"
