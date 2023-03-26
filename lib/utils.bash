@@ -78,9 +78,17 @@ install_version() {
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
 
+  if [[ ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version}" && ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}" ]]; then
+    echo "ERROR: neither ${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version} nor ${ASDF_DOWNLOAD_PATH}/${tool_cmd} exist"
+    echo "ERROR: after untarring the downloaded release file I cannot find the executable"
+  fi
+
   (
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+    echo "making a copy of ${install_path}/${tool_cmd}_${version} to ${install_path}/${tool_cmd}"
+    
+    cp -p "${install_path}/${tool_cmd}_${version}" "${install_path}/${tool_cmd}"
     echo "copied ${ASDF_DOWNLOAD_PATH}/* to ${install_path}"
     echo "Listing file in ${ASDF_DOWNLOAD_PATH}/*"
     ls -l "$ASDF_DOWNLOAD_PATH"/*
