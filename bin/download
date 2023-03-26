@@ -6,7 +6,7 @@ set -euo pipefail
 
 # we must get the os/architecture.
 ARCH=$(uname -m)
-OS=$(une -s)
+OS=$(uname -s)
 ALTARCH=$(uname -m)
 
 # In the first iteration we only work for Darwin
