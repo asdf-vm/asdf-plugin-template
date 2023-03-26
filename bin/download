@@ -34,8 +34,7 @@ mkdir -p "$ASDF_DOWNLOAD_PATH"
 # TODO: Adapt this to proper extension and adapt extracting strategy.
 release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
 
-#"https://github.com/okta/okta-aws-cli/releases/download/v0.3.0/okta-aws-cli_0.3.0_darwin_amd64.tar.gz"
-
+# "https://github.com/okta/okta-aws-cli/releases/download/v0.3.0/okta-aws-cli_0.3.0_darwin_amd64.tar.gz"
 
 # Download tar.gz file to the download directory
 echo "I am about to call download_release with ASDF_INSTALL_VERSION:${ASDF_INSTALL_VERSION} release_file: ${release_file} ALTARCH: ${ALTARCH} OS: ${OS}"
