@@ -71,6 +71,8 @@ install_version() {
   local install_type="$1"
   local version="$2"
   local install_path="${3%/bin}/bin"
+  local tool_cmd
+  tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 
   echo "install_version: install_type: ${install_type} version: ${version} install_path: ${install_path}"
 
@@ -79,8 +81,7 @@ install_version() {
   fi
 
   if [[ ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version}" && ! -f "${ASDF_DOWNLOAD_PATH}/${tool_cmd}" ]]; then
-    echo "ERROR: neither ${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version} nor ${ASDF_DOWNLOAD_PATH}/${tool_cmd} exist"
-    echo "ERROR: after untarring the downloaded release file I cannot find the executable"
+    fail "ERROR: neither ${ASDF_DOWNLOAD_PATH}/${tool_cmd}_${version} nor ${ASDF_DOWNLOAD_PATH}/${tool_cmd} exist. After untarring the downloaded release file I cannot find the executable"
   fi
 
   (
