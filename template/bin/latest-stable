@@ -11,13 +11,13 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 curl_opts=(-sI)
 
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
-	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
+  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
 
 # curl of REPO/releases/latest is expected to be a 302 to another URL
 # when no releases redirect_url="REPO/releases"
 # when there are releases redirect_url="REPO/releases/tag/v<VERSION>"
-redirect_url=$(curl "${curl_opts[@]}" "$GH_REPO/releases/latest" | sed -n -e "s|^location: *||p" | 	sed -n -e "s|\r||p")
+redirect_url=$(curl "${curl_opts[@]}" "$GH_REPO/releases/latest" | sed -n -e "s|^location: *||p" | sed -n -e "s|\r||p")
 version=
 printf "redirect url: %s\n" "$redirect_url"
 if [[ "$redirect_url" == "$GH_REPO/releases" ]]; then
