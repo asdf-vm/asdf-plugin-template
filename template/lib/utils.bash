@@ -37,12 +37,39 @@ list_all_versions() {
 }
 
 download_release() {
-  local version filename url
-  version="$1"
-  filename="$2"
+  local version="$1"
+  local filename="$2"
+
+  # TODO: Adapt the OS & Architecture naming convention for <YOUR TOOL>
+  # See the release flavours in the /releases page of <YOUR TOOL>
+  #local uname_s="$(uname -s)"
+  #local uname_m="$(uname -m)"
+  #local os arch
+
+  #case "$uname_s" in
+  #FreeBSD) os="freebsd" ;;
+  #Darwin) os="darwin" ;;
+  #Linux) os="linux" ;;
+  #*) fail "OS not supported: $uname_s" ;;
+  #esac
+
+  #case "$uname_m" in
+  #i?86) arch="386" ;;
+  #x86_64) arch="amd64" ;;
+  #aarch64) arch="arm64" ;;
+  #armv8l) arch="arm64" ;;
+  #arm64) arch="arm64" ;;
+  #armv7l) arch="arm" ;;
+  #mips) arch="mips" ;;
+  #mipsel) arch="mipsle" ;;
+  #mips64) arch="mips64" ;;
+  #mips64el) arch="mips64le" ;;
+  #*) fail "Architecture not supported: $uname_m" ;;
+  #esac
 
   # TODO: Adapt the release URL convention for <YOUR TOOL>
-  url="$GH_REPO/archive/v${version}.tar.gz"
+  # Example: local url="$GH_REPO/archive/v${version}-${os}-${arch}.tar.gz"
+  local url="$GH_REPO/archive/v${version}.tar.gz"
 
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
