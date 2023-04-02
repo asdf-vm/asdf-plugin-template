@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # dependabot for GitHub Actions for this repo
+  - package-ecosystem: "github-actions"
+    directory: "./github"
+    schedule:
+      interval: "weekly"
+  # dependabot for GitHub Actions for the template
+  - package-ecosystem: "github-actions"
+    directory: "template/.github/"
+    schedule:
+      interval: "weekly"
