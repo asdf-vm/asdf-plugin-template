@@ -24,7 +24,7 @@ Contributions welcome!
 1. Develop!
 1. Lint & Format
     ```shell
-    ./scripts/shellcheck.bash
-    ./scripts/shfmt.bash
+    ./scripts/format.bash
+    ./scripts/lint.bash
     ```
 1. PR changes
