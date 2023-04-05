@@ -43,14 +43,18 @@ download_release() {
   filename="$2"
   arch="$3"
   os="$4"
+  altos="${5}"
 
-  echo "************************************************************************************************"
-  echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
-  echo "************************************************************************************************"
+  echo "****************************************************************************************************************"
+  echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os} altos: ${altos}"
+  echo "****************************************************************************************************************"
 
   # TODO: Adapt the release URL convention for okta-aws-cli
   url="$GH_REPO/releases/download/v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
+
+  echo "****************************************************************************************************************"
   echo "url: ${url}"
+  echo "****************************************************************************************************************"
 
 # check the signature
 # https://github.com/okta/okta-aws-cli/releases/download/v0.2.1/okta-aws-cli_0.2.1_Darwin_arm64.tar.gz
@@ -60,9 +64,6 @@ download_release() {
 # okta-aws-cli_0.2.1_Darwin_arm64_signed.tar.gz
 # okta-aws-cli_0.2.1_Darwin_x86_64.tar.gz
 # okta-aws-cli_0.2.1_Darwin_x86_64_signed.tar.gz
-# okta-aws-cli_0.2.1_freebsd_arm64.tar.gz
-# okta-aws-cli_0.2.1_freebsd_i386.tar.gz
-# okta-aws-cli_0.2.1_freebsd_x86_64.tar.gz
 # okta-aws-cli_0.2.1_Linux_arm64.tar.gz
 
   echo "About to execute curl with TOOL_NAME: ${TOOL_NAME} curl_opts: ${curl_opts} filename: ${filename} url: ${url}"
