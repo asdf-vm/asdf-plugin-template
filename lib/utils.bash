@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+set -x
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for okta-aws-cli.
 GH_REPO="https://github.com/okta/okta-aws-cli"
@@ -43,7 +44,9 @@ download_release() {
   arch="$3"
   os="$4"
 
+  echo "************************************************************************************************"
   echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
+  echo "************************************************************************************************"
 
   # TODO: Adapt the release URL convention for okta-aws-cli
   url="$GH_REPO/releases/download/v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# set -x
+set -x
 
 # we must get the os/architecture.
 ARCH=$(uname -m)
@@ -18,10 +18,13 @@ fi
 # Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
 if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
     ALTARCH=amd64
-elif [[ "${ARCH}" != "x86_64" ]]; then
+elif [[ "${ARCH}" != "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" && "${OS}" == "" ]]; then
     echo "cannot run on hardware ${ARCH}"
     exit 1
 fi
+
+if [[ "${ARCH}" == ""]]
+
 
 current_script_path=${BASH_SOURCE[0]}
 plugin_dir=$(dirname "$(dirname "$current_script_path")")
@@ -38,12 +41,17 @@ release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
 echo "I am about to call download_release with ASDF_INSTALL_VERSION:${ASDF_INSTALL_VERSION} release_file: ${release_file} ALTARCH: ${ALTARCH} OS: ${OS}"
 download_release "$ASDF_INSTALL_VERSION" "$release_file" "${ALTARCH}" "${OS}"
 
+echo "**************************************"
 echo "release_file: ${release_file}"
+echo "**************************************"
 ls -l "$release_file"
+echo "**************************************"
 echo "ASDF_DOWNLOAD_PATH: ${ASDF_DOWNLOAD_PATH}"
 
 #  Extract contents of tar.gz file into the download directory
+echo "**************************************"
 echo "Running tar"
+echo "**************************************"
 pwd
 tar -vxzf "$release_file" -C "$ASDF_DOWNLOAD_PATH"  || fail "Could not extract $release_file"
 
