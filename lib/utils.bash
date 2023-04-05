@@ -41,13 +41,29 @@ download_release() {
   local version filename url
   version="$1"
   filename="$2"
-  arch="$3"
-  os="$4"
-  altos="${5}"
+  os="$3"
+
 
   echo "****************************************************************************************************************"
-  echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os} altos: ${altos}"
+  echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
   echo "****************************************************************************************************************"
+
+# we must get the os/architecture.
+ARCH=$(uname -m)
+OS=$(uname -s)
+ALTARCH=$(uname -m)
+ALTOS=$(uname -s)
+
+# Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
+if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
+    ALTARCH=amd64
+fi
+if [[ "${OS}" == "Linux" ]]; then
+    ALTOS=linux
+fi
+
+arch=${ALTARCH}
+os=${ALTOS}
 
   # TODO: Adapt the release URL convention for okta-aws-cli
   url="$GH_REPO/releases/download/v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"

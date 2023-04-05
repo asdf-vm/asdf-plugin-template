@@ -4,19 +4,19 @@ set -euo pipefail
 
 set -x
 
-# we must get the os/architecture.
-ARCH=$(uname -m)
-OS=$(uname -s)
-ALTARCH=$(uname -m)
-ALTOS=$(uname -s)
+# # we must get the os/architecture.
+# ARCH=$(uname -m)
+# OS=$(uname -s)
+# ALTARCH=$(uname -m)
+# ALTOS=$(uname -s)
 
-# Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
-if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
-    ALTARCH=amd64
-fi
-if [[ "${OS}" == "Linux" ]]; then
-    ALTOS=linux
-fi
+# # Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
+# if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
+#     ALTARCH=amd64
+# fi
+# if [[ "${OS}" == "Linux" ]]; then
+#     ALTOS=linux
+# fi
 
 
 current_script_path=${BASH_SOURCE[0]}
@@ -32,7 +32,7 @@ release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
 
 # Download tar.gz file to the download directory
 echo "About 2call download_release with ASDF_INSTALL_VERSION:${ASDF_INSTALL_VERSION} release_file: ${release_file} ALTARCH: ${ALTARCH} OS: ${OS} ALTOS: ${OS}"
-download_release "$ASDF_INSTALL_VERSION" "$release_file" "${ALTARCH}" "${OS}" "${ALTOS}"
+download_release "$ASDF_INSTALL_VERSION" "$release_file" "${OS}"
 
 echo "**************************************"
 echo "release_file: ${release_file}"
