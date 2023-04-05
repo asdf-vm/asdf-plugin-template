@@ -41,8 +41,6 @@ download_release() {
   local version filename url
   version="$1"
   filename="$2"
-  os="$3"
-
 
   echo "****************************************************************************************************************"
   echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
