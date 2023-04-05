@@ -43,7 +43,7 @@ download_release() {
   filename="$2"
 
   echo "****************************************************************************************************************"
-  echo "INSIDE download_release with version: ${version} filename: ${filename} arch: ${arch} os: ${os}"
+  echo "INSIDE download_release with version: ${version} filename: ${filename}"
   echo "****************************************************************************************************************"
 
 # we must get the os/architecture.
