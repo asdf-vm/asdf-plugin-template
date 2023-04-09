@@ -1,23 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-
 set -x
-
-# # we must get the os/architecture.
-# ARCH=$(uname -m)
-# OS=$(uname -s)
-# ALTARCH=$(uname -m)
-# ALTOS=$(uname -s)
-
-# # Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
-# if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
-#     ALTARCH=amd64
-# fi
-# if [[ "${OS}" == "Linux" ]]; then
-#     ALTOS=linux
-# fi
-
 
 current_script_path=${BASH_SOURCE[0]}
 plugin_dir=$(dirname "$(dirname "$current_script_path")")
