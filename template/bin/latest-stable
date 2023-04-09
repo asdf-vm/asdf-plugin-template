@@ -19,7 +19,7 @@ fi
 # when there are releases redirect_url="REPO/releases/tag/v<VERSION>"
 redirect_url=$(curl "${curl_opts[@]}" "$GH_REPO/releases/latest" | sed -n -e "s|^location: *||p" | sed -n -e "s|\r||p")
 version=
-printf "redirect url: %s\n" "$redirect_url"
+printf "redirect url: %s\n" "$redirect_url" >&2
 if [[ "$redirect_url" == "$GH_REPO/releases" ]]; then
 	version="$(list_all_versions | sort_versions | xargs echo | tail -n1)"
 else
