@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-set -x
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for okta-aws-cli.
 GH_REPO="https://github.com/okta/okta-aws-cli"
@@ -42,45 +41,29 @@ download_release() {
   version="$1"
   filename="$2"
 
-  echo "****************************************************************************************************************"
-  echo "INSIDE download_release with version: ${version} filename: ${filename}"
-  echo "****************************************************************************************************************"
+  # we must get the os/architecture.
+  ARCH=$(uname -m)
+  OS=$(uname -s)
+  ALTARCH=$(uname -m)
+  ALTOS=$(uname -s)
 
-# we must get the os/architecture.
-ARCH=$(uname -m)
-OS=$(uname -s)
-ALTARCH=$(uname -m)
-ALTOS=$(uname -s)
-
-# Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
-if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
+  # Okta has changed from x86_64 to amd64 for Darwin starting from 0.3.0 (why? something I don't know?) so we need to adapt
+  if [[ "${ARCH}" == "x86_64" && "${ASDF_INSTALL_VERSION}" == "0.3.0" ]]; then
     ALTARCH=amd64
-fi
-if [[ "${OS}" == "Linux" ]]; then
+  fi
+  if [[ "${OS}" == "Linux" ]]; then
     ALTOS=linux
-fi
+  fi
 
-arch=${ALTARCH}
-os=${ALTOS}
+  arch=${ALTARCH}
+  os=${ALTOS}
 
   # TODO: Adapt the release URL convention for okta-aws-cli
   url="$GH_REPO/releases/download/v${version}/okta-aws-cli_${version}_${os}_${arch}.tar.gz"
 
-  echo "****************************************************************************************************************"
-  echo "url: ${url}"
-  echo "****************************************************************************************************************"
+  # TODO: add a check of the signature
+  # https://github.com/okta/okta-aws-cli/releases/download/v0.2.1/okta-aws-cli_0.2.1_Darwin_arm64.tar.gz
 
-# check the signature
-# https://github.com/okta/okta-aws-cli/releases/download/v0.2.1/okta-aws-cli_0.2.1_Darwin_arm64.tar.gz
-
-
-# okta-aws-cli_0.2.1_Darwin_arm64.tar.gz
-# okta-aws-cli_0.2.1_Darwin_arm64_signed.tar.gz
-# okta-aws-cli_0.2.1_Darwin_x86_64.tar.gz
-# okta-aws-cli_0.2.1_Darwin_x86_64_signed.tar.gz
-# okta-aws-cli_0.2.1_Linux_arm64.tar.gz
-
-  echo "About to execute curl with TOOL_NAME: ${TOOL_NAME} curl_opts: ${curl_opts} filename: ${filename} url: ${url}"
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
@@ -91,8 +74,6 @@ install_version() {
   local install_path="${3%/bin}/bin"
   local tool_cmd
   tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-
-  echo "install_version: install_type: ${install_type} version: ${version} install_path: ${install_path}"
 
   if [ "$install_type" != "version" ]; then
     fail "asdf-$TOOL_NAME supports release installs only"
@@ -105,25 +86,11 @@ install_version() {
   (
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
-    echo "making a copy of ${install_path}/${tool_cmd}_v${version} to ${install_path}/${tool_cmd}"
     cp -p "${install_path}/${tool_cmd}_v${version}" "${install_path}/${tool_cmd}"
-    echo "copied ${ASDF_DOWNLOAD_PATH}/* to ${install_path}"
-    echo "Listing file in ${ASDF_DOWNLOAD_PATH}/*"
-    ls -l "$ASDF_DOWNLOAD_PATH"/*
-
-    echo "listing ${install_path}"
-    ls -l ${install_path}
 
     # TODO: Assert okta-aws-cli executable exists.
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-    echo "tool_cmd: ${tool_cmd}"
-
-    echo "checking for executable install_path: ${install_path} tool_cmd: ${tool_cmd}"
-
-    echo "listing file: install_path/tool_cmd ${install_path}/${tool_cmd}"
-
-    ls -l ${install_path}/${tool_cmd}
 
     test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
