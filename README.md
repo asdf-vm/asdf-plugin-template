@@ -1,6 +1,6 @@
 <div align="center">
 
-# asdf-okta-aws-cli [![Build](https://github.com/bennythejudge/asdf-okta-aws-cli/actions/workflows/build.yml/badge.svg)](https://github.com/bennythejudge/asdf-okta-aws-cli/actions/workflows/build.yml) [![Lint](https://github.com/bennythejudge/asdf-okta-aws-cli/actions/workflows/lint.yml/badge.svg)](https://github.com/bennythejudge/asdf-okta-aws-cli/actions/workflows/lint.yml)
+# asdf-okta-aws-cli [![Build](https://github.com/bennythejudge/asdf-plugin-okta-aws-cli/actions/workflows/build.yml/badge.svg)](https://github.com/bennythejudge/asdf-okta-aws-cli/actions/workflows/build.yml) [![Lint](https://github.com/bennythejudge/asdf-plugin-okta-aws-cli/blob/main/.github/workflows/lint.yml)](https://github.com/bennythejudge/asdf-okta-aws-cli/actions/workflows/lint.yml)
 
 
 [okta-aws-cli](https://github.com/okta/okta-aws-cli) plugin for the [asdf version manager](https://asdf-vm.com).
