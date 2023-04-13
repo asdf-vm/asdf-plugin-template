@@ -2,9 +2,16 @@ version: 2
 updates:
   # dependabot for GitHub Actions for this repo
   - package-ecosystem: "github-actions"
-    directory: "./github"
+    directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      # day: "saturday"
+      # time: '04:00'      
+    open-pull-requests-limit: 10
+    reviewers:
+    - bennythejudge
+    labels:
+    - dependencies
   # dependabot for GitHub Actions for the template
   - package-ecosystem: "github-actions"
     directory: "template/.github/"
