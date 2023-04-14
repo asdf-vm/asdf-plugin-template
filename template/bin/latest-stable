@@ -23,7 +23,7 @@ printf "redirect url: %s\n" "$redirect_url" >&2
 if [[ "$redirect_url" == "$GH_REPO/releases" ]]; then
 	version="$(list_all_versions | sort_versions | xargs echo | tail -n1)"
 else
-	version="$(printf "%s\n" "$redirect_url" | sed 's|.*/tag/v\?||')"
+	version="$(printf "%s\n" "$redirect_url" | sed 's|.*/tag/v\{0,1\}||')"
 fi
 
 printf "%s\n" "$version"
