@@ -5,19 +5,23 @@ set -euo pipefail
 current_script_path=${BASH_SOURCE[0]}
 plugin_dir=$(dirname "$(dirname "$current_script_path")")
 
-# shellcheck source=../lib/utils.bash
+# shellcheck source=./lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
-mkdir -p "$ASDF_DOWNLOAD_PATH"
+download_base_path="$(sanitize_path "$ASDF_DOWNLOAD_PATH")"
+mkdir -p "$download_base_path"
 
 # TODO: Adapt this to proper extension and adapt extracting strategy.
-release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
+release_file="$download_base_path"/"$TOOL_NAME".zip
 
 # Download tar.gz file to the download directory
 download_release "$ASDF_INSTALL_VERSION" "$release_file"
 
+install_base_path="$(sanitize_path "$ASDF_DOWNLOAD_PATH")"
+mkdir -p "$install_base_path"
+
 #  Extract contents of tar.gz file into the download directory
-tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $release_file"
+tar -xzf "$release_file" -C "$install_base_path" --strip-components=1 || fail "Could not extract $release_file"
 
 # Remove the tar.gz file since we don't need to keep it
 rm "$release_file"

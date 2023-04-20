@@ -36,13 +36,44 @@ list_all_versions() {
 	list_github_tags
 }
 
+get_download_link() {
+	local version
+	version="$1"
+
+	# seems like version can come as full download url or just the version
+	if [[ ${version} = https* ]]; then
+		(echo "${version}/" | sed 's|/tag/|/download/|')
+	else
+		(echo "${GH_REPO}/releases/download/v${version}/")
+	fi
+}
+
+get_version() {
+	local version
+	version="$1"
+
+	# seems like version can come as full download url or just the version
+	if [[ ${version} = https* ]]; then
+		(echo "${version//${GH_REPO}\/releases\/tag\/v/}")
+	else
+		(echo "${version}")
+	fi
+}
+
+sanitize_path() {
+	local path
+	path="$1"
+
+	echo "${path//${GH_REPO}\/releases\/tag\/v/}"
+}
+
 download_release() {
 	local version filename url
 	version="$1"
 	filename="$2"
 
 	# TODO: Adapt the release URL convention for <YOUR TOOL>
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$(get_download_link "${version}")"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -51,7 +82,8 @@ download_release() {
 install_version() {
 	local install_type="$1"
 	local version="$2"
-	local install_path="${3%/bin}/bin"
+	local install_path="$3"
+	install_path="$(sanitize_path "$install_path")"
 
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
@@ -59,7 +91,7 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		cp -r "$(sanitize_path "$ASDF_DOWNLOAD_PATH")"/* "$install_path"
 
 		# TODO: Assert <YOUR TOOL> executable exists.
 		local tool_cmd
