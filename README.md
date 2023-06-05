@@ -1,6 +1,7 @@
 # asdf-plugin-template [![Build](https://github.com/asdf-vm/asdf-plugin-template/actions/workflows/build.yml/badge.svg)](https://github.com/asdf-vm/asdf-plugin-template/actions/workflows/build.yml) [![Lint](https://github.com/asdf-vm/asdf-plugin-template/actions/workflows/lint.yml/badge.svg)](https://github.com/asdf-vm/asdf-plugin-template/actions/workflows/lint.yml)
 
 This is an [asdf-vm plugin](https://asdf-vm.com/#/plugins-create) template with CI to run [Shellcheck](https://github.com/koalaman/shellcheck) and testing with the [asdf test GitHub Action](https://github.com/asdf-vm/actions).
+
 ## Usage
 
 1. [Generate](https://github.com/asdf-vm/asdf-plugin-template/generate) a new repository based on this template.
@@ -16,15 +17,20 @@ This is an [asdf-vm plugin](https://asdf-vm.com/#/plugins-create) template with 
 Contributions welcome!
 
 1. Install `asdf` tools
+
     ```shell
     asdf plugin add shellcheck https://github.com/luizm/asdf-shellcheck.git
     asdf plugin add shfmt https://github.com/luizm/asdf-shfmt.git
     asdf install
     ```
+
 1. Develop!
+
 1. Lint & Format
+
     ```shell
     ./scripts/format.bash
     ./scripts/lint.bash
     ```
+
 1. PR changes
