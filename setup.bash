@@ -85,7 +85,7 @@ ask_license() {
 	printf "%s\n" "https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#searching-github-by-license-type" >&2
 
 	while true; do
-		license="$(ask_for "License keyword:" "apache-2.0" "mit/[apache-2.0]/agpl-3.0/unlicense")"
+		license="$(ask_for "License keyword:" "APACHE-2.0" "MIT/APACHE-2.0/MPL-2.0/AGPL-3.0")"
 		keyword=$(echo "$license" | tr '[:upper:]' '[:lower:]')
 
 		url="https://choosealicense.com/licenses/$keyword/"
@@ -170,7 +170,7 @@ setup_github() {
 			git read-tree --prefix="" -u template:template/
 
 			download_license "$license_keyword" "$out/LICENSE"
-			sed -i '1s;^;TODO: INSERT YOUR NAME & COPYRIGHT YEAR\n;g' "$out/LICENSE"
+			sed -i '1s;^;TODO: INSERT YOUR NAME & COPYRIGHT YEAR (if applicable to your license)\n;g' "$out/LICENSE"
 
 			set_placeholder "<YOUR TOOL>" "$tool_name" "$out"
 			set_placeholder "<TOOL HOMEPAGE>" "$tool_homepage" "$out"
