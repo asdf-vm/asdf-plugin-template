@@ -259,7 +259,7 @@ setup_gitlab() {
 			cd "$out"
 			git checkout --orphan out
 			git rm -rf "$out" >/dev/null
-			git read-tree --prefix=/ -u template:template/
+			git read-tree --prefix="" -u template:template/
 
 			download_license "$license_keyword" "$out/LICENSE"
 
