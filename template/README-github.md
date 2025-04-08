@@ -34,13 +34,13 @@ asdf plugin add <YOUR TOOL> https://github.com/<YOUR GITHUB USERNAME>/asdf-<YOUR
 
 ```shell
 # Show all installable versions
-asdf list-all <YOUR TOOL>
+asdf list all <YOUR TOOL>
 
 # Install specific version
 asdf install <YOUR TOOL> latest
 
 # Set a version globally (on your ~/.tool-versions file)
-asdf global <YOUR TOOL> latest
+asdf set -u <YOUR TOOL> latest
 
 # Now <YOUR TOOL> commands are available
 <TOOL CHECK>
